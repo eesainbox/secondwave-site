@@ -398,7 +398,7 @@
       grid-template-columns: 1fr;
       gap: 28px;
       padding: 36px 32px 40px;
-      align-items: flex-start;
+      align-items: stretch;
     }
     .cs-grid img {
       width: 100%;
@@ -871,7 +871,7 @@
 
       <div class="cs-grid">
         <!-- LEFT: BEFORE -->
-        <div>
+        <div style="display:flex;flex-direction:column;height:100%;">
           <span class="badge-before">Before</span>
           <p style="font-size:12px;color:var(--muted);margin:0 0 24px;">Sep 1 — Oct 31, 2025</p>
           <div style="display:flex;flex-direction:column;gap:20px;">
@@ -902,12 +902,12 @@
             <img src="/brand_assets/klaviyo_before (2).png"
                  alt="Klaviyo dashboard — before"
                  loading="lazy"
-                 style="width:100%;height:280px;object-fit:contain;object-position:center;display:block;border-radius:8px;">
+                 style="width:100%;flex:1;object-fit:cover;object-position:top;display:block;border-radius:8px;min-height:250px;">
           </div>
         </div>
 
         <!-- RIGHT: AFTER -->
-        <div>
+        <div style="display:flex;flex-direction:column;height:100%;">
           <span class="badge-after">After</span>
           <p style="font-size:12px;color:var(--muted);margin:0 0 24px;">Oct 31 — Dec 2, 2025</p>
           <div style="display:flex;flex-direction:column;gap:20px;">
@@ -947,7 +947,7 @@
             <img src="/brand_assets/klaviyo_after.png"
                  alt="Klaviyo dashboard — after"
                  loading="lazy"
-                 style="width:100%;height:280px;object-fit:contain;object-position:center;display:block;border-radius:8px;">
+                 style="width:100%;flex:1;object-fit:cover;object-position:top;display:block;border-radius:8px;min-height:250px;">
           </div>
         </div>
       </div>
