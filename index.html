@@ -185,12 +185,13 @@
       text-decoration: none;
     }
     .nav-logo img {
-      width: 56px;
-      height: 56px;
+      width: 44px;
+      height: 44px;
       display: block;
       object-fit: contain;
       mix-blend-mode: screen;
-      filter: brightness(1.2) contrast(1.1);
+      filter: brightness(2) contrast(1.2);
+      background: transparent;
     }
     .nav-links {
       display: none;
@@ -616,6 +617,24 @@
 
     /* Count-up: hidden until animated */
     [data-count] { display:inline; }
+
+    @media (max-width: 768px) {
+      .hero-headline, h1 {
+        font-size: clamp(26px, 7.5vw, 40px);
+        line-height: 1.1;
+        word-break: keep-all;
+        overflow-wrap: normal;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .klaviyo-img, .case-study img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        overflow: visible;
+      }
+    }
   </style>
 </head>
 <body>
@@ -624,7 +643,7 @@
 <nav id="nav" role="navigation" aria-label="Main navigation">
   <div class="wrap nav-inner">
     <a href="#" class="nav-logo" aria-label="SecondWave Inbox — home">
-      <img src="/brand_assets/SecondWave_Logo_1.png" alt="SecondWave Inbox">
+      <img src="/brand_assets/wave_mark.png" alt="SecondWave Inbox">
     </a>
 
     <div class="nav-links">
@@ -668,7 +687,7 @@
 <!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
 <section id="hero">
   <!-- Faint wave emblem background -->
-  <img src="/brand_assets/SecondWave_Logo_1.png"
+  <img src="/brand_assets/wave_mark.png"
        class="hero-wave"
        alt=""
        aria-hidden="true"
@@ -963,21 +982,7 @@
                 border-radius:var(--r-feat);
                 box-shadow:var(--shadow-feat);
                 overflow:hidden;">
-      <!-- HASHIM VIDEO: paste YouTube embed here when ready -->
-      <div style="padding-bottom:56.25%;position:relative;background:#07090F;">
-        <div style="position:absolute;inset:0;display:flex;align-items:center;
-                    justify-content:center;flex-direction:column;gap:14px;">
-          <div style="width:72px;height:72px;border-radius:50%;
-                      background:rgba(59,158,255,0.08);
-                      border:1px solid rgba(59,158,255,0.18);
-                      display:flex;align-items:center;justify-content:center;">
-            <svg width="26" height="26" viewBox="0 0 24 24">
-              <polygon points="6,3 20,12 6,21" fill="#3B9EFF"/>
-            </svg>
-          </div>
-          <p style="color:var(--muted);font-size:13px;margin:0;">Video testimonial coming soon</p>
-        </div>
-      </div>
+      <iframe width="100%" height="480" src="https://www.youtube.com/embed/hWB-tKoCqlA" title="Hashim Testimonial" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:12px;display:block;"></iframe>
       <div style="padding:36px 40px 40px;">
         <p style="font-size:clamp(17px,2vw,22px);font-weight:300;line-height:1.65;
                   color:rgba(255,255,255,0.85);margin:0 0 20px;font-style:italic;">
