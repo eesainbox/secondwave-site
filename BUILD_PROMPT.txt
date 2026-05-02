@@ -1,0 +1,212 @@
+Build the SecondWave Inbox landing page as a single index.html file. Read the CLAUDE.md and all files in brand_assets/ before writing a single line of code. Invoke the frontend-design skill first. Do not commit or push to GitHub until I explicitly say so. Serve on localhost:3000 using node serve.mjs.
+
+---
+
+BRAND
+Background: #0C1935 (deep navy)
+CTA button: pull the icy electric blue from the wave curl on the SecondWave logo — use that as the accent color throughout
+Font: 'Helvetica Neue', Helvetica, Arial, sans-serif
+Headings: weight 700-800, tracking -0.03em
+Body: weight 300-400, 16px minimum, line-height 1.7
+Logo files in brand_assets/: SecondWave_Logo_1.png for nav, SecondWave_Logo_2.png for footer
+Pricing track colors: teal #00B4A6 for flows, electric blue for campaigns, amber #F5A623 for full stack
+Do not use default Tailwind blue or indigo anywhere
+
+---
+
+SECTION 1 — NAV (sticky)
+On desktop: logo left, center links (Home, Case Studies, Work, Process, FAQs), Book a Call button right
+Button: electric blue pill, white text, visibly brighter than rest of nav
+On mobile: logo left, hamburger right, full-screen overlay menu
+All links smooth-scroll to section anchors
+
+---
+
+SECTION 2 — HERO
+Eyebrow (small caps, muted): For eCommerce brand owners
+Headline: Two weeks. What we build compounds whether you stay or not.
+Subhead: Retention-first email and SMS systems built inside your Klaviyo account. No discount blasts. No fluff. Revenue that keeps running after day 14.
+No CTA in hero. No trust line. First CTA the visitor sees is the nav button.
+Add a subtle radial gradient glow behind the headline, low opacity, for depth.
+
+---
+
+SECTION 3 — VSL
+Headline: See exactly how we run it.
+No subtext.
+Centered 16:9 video container, dark background, play button icon overlay.
+Comment in the HTML: <!-- VIDEO EMBED: paste YouTube iframe here when ready -->
+CTA below: Book a Strategy Call linking to https://calendly.com/eesawithsecondwave/sw-audit
+
+---
+
+SECTION 4 — CLIENT LOGO SLIDER
+Label (small, muted, centered): trusted by growing ecommerce brands
+Auto-scrolling infinite ribbon. Touch swipe on mobile.
+Logos in brand_assets/: logo_functional_patterns.png, logo_goclean.png, logo_alghani_traders.png, logo_hippie_skin.png
+Apply CSS filter: brightness(0) invert(1) to any logo that needs white treatment on dark background
+
+---
+
+SECTION 5 — WORK PORTFOLIO
+Anchor: id="work"
+Headline: Emails built to move customers forward.
+Horizontal scroll carousel. Arrow navigation on desktop. Touch swipe on mobile. Show 1.5 cards on mobile (card width 85vw so half of next card peeks).
+Images: Frame_3.png through Frame_10.png from brand_assets/
+
+---
+
+SECTION 6 — CASE STUDY
+Anchor: id="case-studies"
+Headline: Where strategy makes the difference.
+
+Primary card — Go Clean — Full Retention Build
+Before column (Sep 1 to Oct 31, 2025):
+Email attribution: 13.12% of total revenue
+Flows: $0.00 revenue
+Bounce rate: 6.04%
+Open rate: 36.6%
+Sign-up form: not collecting emails
+
+After column (Oct 31 to Dec 2, 2025):
+Email attribution: 81.79% of total revenue
+Period over period: plus 1385%
+Total revenue: plus 212% vs prior period
+Open rate: 62.9%
+Click rate: 2.79%
+Bounce rate: 0.32%
+Form opt-in rate: 12% (industry average under 8%)
+
+Below the stats: GoCleanBefore_After.png dashboard screenshot. Overlay a muted BEFORE badge on the top half and an electric blue AFTER badge on the bottom half.
+
+Secondary card — Functional Patterns — Retention Build
+$977,694.81 attributed revenue. 40.79% of total revenue driven by email. 8 plus flows built.
+
+CTA below both cards: Book a Strategy Call linking to https://calendly.com/eesawithsecondwave/sw-audit
+
+---
+
+SECTION 7 — TESTIMONIALS
+Headline: Don't take our word for it.
+
+Featured video block (full width):
+Placeholder for Hashim video. Comment: <!-- HASHIM VIDEO: paste YouTube embed here when ready -->
+Below placeholder: his quote in large type
+"SecondWave took our email marketing from little to no sales to a channel that started generating real revenue. They rebuilt our flows, improved abandoned cart performance, and approached everything strategically by first understanding our audience. Highly recommend."
+Attribution: Hashim, Go Clean
+
+Two written testimonial cards below (2 column desktop, stacked mobile):
+
+Card 1:
+5 stars
+"Josh and Eesa were easy to work with, were able to adapt to our needs as the project progressed. We are happy with the service they provided. They created extra emails to help fill gaps in our flows. Really appreciate their help and design skills for user-friendly and eye-catching emails."
+Name: Alicia T. | Fitness Brand
+Tags: Collaborative, Committed to Quality, Solution Oriented, Clear Communicator
+
+Card 2:
+5 stars
+Tags: Committed to Quality, Clear Communicator, Detail Oriented
+Context: Klaviyo Email Design Specialist
+Location: Missouri City, USA
+
+---
+
+SECTION 8 — PRICING
+Anchor: id="process"
+Headline: It all starts in two weeks.
+
+Replicate the exact 3-column 3-row tiered structure from brand_assets/Frame_1__30_.png. Match layout, card content, step labels, and color coding exactly.
+
+Step labels: STEP 1 — TWO-WEEK PILOT (DAYS 1-14), STEP 2 — FULL BUILD, STEP 3 — ONGOING MANAGEMENT
+Column track labels: FLOW FOCUS (teal), CAMPAIGNS FOCUS (blue), FULL STACK (amber)
+Cards elevate on hover: transform translateY(-4px) and box-shadow transition
+Do not use the word retainer anywhere. Use ongoing management.
+Payment note near Step 1: Two-week pilot is paid in full upfront.
+
+Note below Step 3: Flows or campaigns partially built? Pricing and scope vary, discussed case by case.
+
+Standalone card below (muted, separate from the tiers):
+STANDALONE — DELIVERABILITY FIX
+$447
+Broken sender reputation repair. SPF, DKIM, DMARC setup. List cleaning and warm-up structure.
+
+CTA below everything: Not sure which fits? Book a call. linking to https://calendly.com/eesawithsecondwave/sw-audit
+
+---
+
+SECTION 9 — FAQ
+Anchor: id="faqs"
+Headline: Good questions deserve straight answers.
+Accordion. Full-width tap targets. Smooth expand and collapse.
+
+Q1: Why is SecondWave Inbox different?
+A: Most agencies sell you on their process. We remove the risk of it entirely. You pay upfront for two weeks of real work. On day 14 you have assets running in your account and data to judge us by. Not a deck. Not a PDF. Actual work, first.
+
+Q2: How does payment work?
+A: The two-week pilot is paid in full before we start. That payment initiates the build. After 14 days you have the assets, the data, and a clear picture of what moved. From there you decide what comes next. No pressure. No auto-renewal.
+
+Q3: Do I keep the work if I don't continue?
+A: Yes. Everything we build lives in your Klaviyo account. You own it from day one.
+
+Q4: What do you need from me to get started?
+A: Klaviyo collaborator or admin access, your existing brand guidelines or templates, and 30 minutes for a kickoff call. We handle the rest.
+
+Q5: Do you work with brands outside Canada?
+A: Yes. Canada, US, UK, Australia. Klaviyo works everywhere we do.
+
+---
+
+SECTION 10 — CONTENT
+Anchor: id="content"
+Headline: Built in public. Learn how we think.
+Subhead: Free breakdowns on email, retention, and what most brands are getting wrong.
+
+YouTube thumbnail grid (3 videos, 3 columns desktop, stacked mobile):
+Each card: thumbnail image using https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg, play button overlay, opens YouTube in new tab on click
+
+Video 1: https://youtu.be/Pj1dIx8Dxzk — ID is Pj1dIx8Dxzk
+Video 2: https://youtu.be/IiwtMPL7mf4 — ID is IiwtMPL7mf4
+Video 3: https://youtu.be/7DJan8mG8rU — ID is 7DJan8mG8rU
+
+Social content carousel below the video grid:
+Images in brand_assets/: slide_who_checks_gmail.png, slide_mom_grandma.png, slide_they_all_check_inbox.png
+Horizontal scroll carousel. Same swipe behavior as work portfolio.
+
+---
+
+SECTION 11 — FOOTER
+Logo: SecondWave_Logo_2.png (wave mark and wordmark, white version)
+Tagline: Klaviyo retention. Email and SMS.
+CTA: Book a Strategy Call linking to https://calendly.com/eesawithsecondwave/sw-audit
+Copyright: 2026 SecondWave Inbox. Ontario, Canada.
+No email addresses anywhere on the page.
+
+---
+
+MOBILE RULES — test at 390px after every section before moving on:
+Nav collapses to hamburger at 768px or below
+No horizontal scroll at any viewport width
+Hero headline minimum 32px on mobile
+All CTA buttons minimum 48px height and full width on mobile
+Pricing cards single column on mobile, 3-column grid at 1024px and above
+Case study single column stack on mobile
+Testimonial cards single column stack on mobile
+FAQ accordion full-width large tap targets minimum 44px height
+Email portfolio and content carousel: touch swipe, no arrow buttons needed on mobile
+Logo slider: pure CSS scroll, no JS dependency
+
+---
+
+PERFORMANCE RULES:
+All images loaded with loading="lazy" except logo
+No external fonts — Helvetica Neue is a system font, no import needed
+Minimal JS, no frameworks
+
+---
+
+SCREENSHOT WORKFLOW:
+After each section: screenshot, review, fix visible issues, screenshot again. Minimum 2 passes. Delete temporary screenshots between sections. Skip screenshot loop for any CSS animation or scroll behavior.
+
+---
+
+Build section by section in order. Show me localhost preview after each major section group: hero through VSL, then slider through portfolio, then case study through testimonials, then pricing through footer. Do not rush to the end without showing checkpoints.

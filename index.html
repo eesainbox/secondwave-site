@@ -1,0 +1,1481 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecondWave Inbox — Klaviyo Retention for eCommerce Brands</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* ═══════════════════════════════════════════
+       DARK PRECISION — DESIGN TOKENS
+    ═══════════════════════════════════════════ */
+    :root {
+      --navy:    #0C1935;
+      --navy-el: #0F1E3C;
+      --navy-fl: #132047;
+      --blue:    #3B9EFF;
+      --blue-hi: #60B4FF;
+      --teal:    #00B4A6;
+      --amber:   #F5A623;
+      --white:   #FFFFFF;
+      --muted:   #8A9BBF;
+      --muted2:  rgba(255,255,255,0.4);
+      --font:    'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+      /* radius system */
+      --r-tag:   4px;
+      --r-card:  12px;
+      --r-feat:  20px;
+
+      /* layered shadow */
+      --shadow-card: 0 1px 2px rgba(0,0,0,0.4), 0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.04);
+      --shadow-feat: 0 2px 4px rgba(0,0,0,0.5), 0 16px 56px rgba(0,0,0,0.38), 0 0 0 1px rgba(255,255,255,0.05);
+      --shadow-hover-blue:  0 4px 8px rgba(0,0,0,0.5), 0 20px 60px rgba(59,158,255,0.18), 0 0 0 1px rgba(255,255,255,0.06);
+      --shadow-hover-teal:  0 4px 8px rgba(0,0,0,0.5), 0 20px 60px rgba(0,180,166,0.18), 0 0 0 1px rgba(255,255,255,0.06);
+      --shadow-hover-amber: 0 4px 8px rgba(0,0,0,0.5), 0 20px 60px rgba(245,166,35,0.15), 0 0 0 1px rgba(255,255,255,0.06);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: var(--font);
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 1.7;
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    /* Dot grid at 2% opacity */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.055) 1px, transparent 1px);
+      background-size: 32px 32px;
+      opacity: 0.38;
+    }
+
+    /* All content above dot grid */
+    body > * { position: relative; z-index: 1; }
+
+    /* ── LAYOUT ── */
+    .wrap { width:100%; max-width:1160px; margin:0 auto; padding:0 22px; }
+    @media(min-width:768px){ .wrap { padding:0 40px; } }
+
+    section { padding:96px 0; }
+    @media(min-width:768px){ section { padding:120px 0; } }
+
+    /* ── TYPOGRAPHY ── */
+    .display {
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+    }
+    .h2 {
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+    .eyebrow {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+    }
+    .subhead {
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    /* ── CENTERED TEXT BLOCKS ── */
+    .txt-center { text-align: center; }
+    .body-max { max-width: 640px; margin-left: auto; margin-right: auto; }
+
+    /* ── BUTTON ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font);
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: -0.01em;
+      padding: 12px 28px;
+      border-radius: 9999px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      min-height: 48px;
+      transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1),
+                  box-shadow 0.18s ease,
+                  filter 0.15s ease;
+    }
+    .btn-blue {
+      background: var(--blue);
+      color: #fff;
+      box-shadow: 0 2px 20px rgba(59,158,255,0.4), 0 1px 4px rgba(0,0,0,0.3);
+    }
+    .btn-blue:hover {
+      filter: brightness(1.15);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 32px rgba(59,158,255,0.55), 0 1px 6px rgba(0,0,0,0.3);
+    }
+    .btn-blue:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+    .btn-blue:active { transform: translateY(0); filter: brightness(0.95); }
+    @media(max-width:639px){ .btn-fw { width:100%; min-height:52px; font-size:15px; } }
+
+    /* ── MARQUEE RIBBON ── */
+    #ribbon {
+      background: #080F1A;
+      overflow: hidden;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .ribbon-track {
+      display: flex;
+      width: max-content;
+      align-items: center;
+      animation: scroll-ribbon 28s linear infinite;
+      white-space: nowrap;
+    }
+    @keyframes scroll-ribbon {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .ribbon-track span {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.38);
+      padding: 0 20px;
+    }
+
+    /* ── NAV ── */
+    #nav {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      background: rgba(12,25,53,0.9);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.055);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+    }
+    .nav-logo {
+      display: block;
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+    .nav-logo img {
+      width: 56px;
+      height: 56px;
+      display: block;
+      object-fit: contain;
+      mix-blend-mode: screen;
+      filter: brightness(1.2) contrast(1.1);
+    }
+    .nav-links {
+      display: none;
+      gap: 36px;
+      align-items: center;
+    }
+    @media(min-width:768px){
+      .nav-links   { display: flex; }
+      #hamburger   { display: none !important; }
+      .nav-cta-d   { display: inline-flex !important; }
+    }
+    .nav-link {
+      font-size: 13.5px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      transition: color 0.14s ease;
+    }
+    .nav-link:hover { color: #fff; }
+    .nav-link:focus-visible { outline:2px solid var(--blue); outline-offset:3px; border-radius:4px; }
+    .nav-link:active { opacity:0.7; }
+    .nav-cta-d { display: none; font-size: 13px; padding: 10px 22px; min-height: 40px; }
+
+    /* Hamburger */
+    #hamburger {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      padding: 8px;
+      cursor: pointer;
+    }
+    .hline {
+      display: block;
+      width: 22px; height: 2px;
+      background: #fff;
+      border-radius: 2px;
+    }
+    #hamburger:focus-visible { outline:2px solid var(--blue); outline-offset:4px; border-radius:4px; }
+
+    /* Mobile overlay */
+    #mob-menu {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: #0C1935;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease;
+    }
+    #mob-menu.open { opacity:1; pointer-events:all; }
+    #mob-close {
+      position:absolute; top:20px; right:20px;
+      background:none; border:none; cursor:pointer;
+      color:#fff; font-size:26px; line-height:1;
+      transition: opacity 0.14s ease;
+    }
+    #mob-close:hover { opacity:0.65; }
+    #mob-close:focus-visible { outline:2px solid var(--blue); outline-offset:4px; border-radius:4px; }
+    .mob-link {
+      font-size: 26px; font-weight: 700; letter-spacing:-0.03em;
+      color: #fff; text-decoration: none;
+      transition: color 0.14s ease;
+    }
+    .mob-link:hover { color: var(--blue); }
+    .mob-link:focus-visible { outline:2px solid var(--blue); outline-offset:4px; border-radius:4px; }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      padding: 60px 0 40px;
+    }
+    @media(max-width:767px){
+      #hero { padding: 40px 0 40px; }
+    }
+    .hero-wave {
+      position: absolute;
+      top: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 520px;
+      height: 520px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.07;
+      clip-path: circle(38% at 50% 35%);
+    }
+    .hero-content { position: relative; z-index: 1; }
+
+    /* ── LOGO SLIDER ── */
+    #logos { padding: 52px 0; overflow: hidden; }
+    .slider-track {
+      display: flex;
+      width: max-content;
+      align-items: center;
+      gap: 64px;
+      animation: scroll-logos 26s linear infinite;
+    }
+    @keyframes scroll-logos {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .slider-track img {
+      height: 34px;
+      width: auto;
+      object-fit: contain;
+      opacity: 0.8;
+      flex-shrink: 0;
+      transition: opacity 0.2s ease;
+    }
+    .slider-track img:hover { opacity: 1; }
+    .fade-l {
+      position:absolute; left:0; top:0; bottom:0; width:120px;
+      background: linear-gradient(to right, var(--navy), transparent);
+      pointer-events: none; z-index: 2;
+    }
+    .fade-r {
+      position:absolute; right:0; top:0; bottom:0; width:120px;
+      background: linear-gradient(to left, var(--navy), transparent);
+      pointer-events: none; z-index: 2;
+    }
+
+    /* ── WORK CAROUSEL ── */
+    .work-outer {
+      position: relative;
+      overflow: hidden;
+    }
+    .work-carousel {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 4px;
+    }
+    .work-carousel::-webkit-scrollbar { display: none; }
+    .work-card {
+      flex: 0 0 100%;
+      scroll-snap-align: start;
+      border-radius: var(--r-card);
+      overflow: hidden;
+      background: none;
+      border: none;
+      box-shadow: none;
+      padding: 0;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .work-card:hover {}
+    @media(min-width:768px){
+      .work-card { flex: 0 0 calc(25% - 12px); }
+    }
+    .work-card img { width:100%; height:auto; display:block; object-fit:cover; border-radius:12px; }
+
+    .arrow-btn {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--navy-el);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; flex-shrink: 0;
+      transition: background 0.14s ease, transform 0.14s ease;
+    }
+    .arrow-btn:hover { background: var(--navy-fl); transform: scale(1.06); }
+    .arrow-btn:focus-visible { outline:2px solid var(--blue); outline-offset:3px; }
+    .arrow-btn:active { transform:scale(0.95); }
+
+    /* ── CASE STUDY ── */
+    .cs-feat {
+      border-radius: var(--r-feat);
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.07);
+      box-shadow: var(--shadow-feat);
+      overflow: hidden;
+    }
+    .cs-band {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 32px;
+    }
+    .cs-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 28px;
+      padding: 36px 32px 40px;
+    }
+    @media(min-width:768px){
+      .cs-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .stat-num {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      display: block;
+    }
+    .stat-lbl {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+    .badge-before {
+      display: inline-block;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.5);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: var(--r-tag);
+      margin-bottom: 6px;
+    }
+    .badge-after {
+      display: inline-block;
+      background: var(--blue);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: var(--r-tag);
+      margin-bottom: 6px;
+    }
+
+    /* ── PRICING ── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    @media(min-width:1024px){
+      .pricing-grid { grid-template-columns: 1fr 1fr 1fr; }
+    }
+    .p-card {
+      background: var(--navy-el);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: var(--r-card);
+      padding: 24px 22px 28px;
+      box-shadow: var(--shadow-card);
+      transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.22s ease;
+    }
+    .p-card:hover { transform: translateY(-4px); }
+    .t-flow:hover  { box-shadow: var(--shadow-hover-teal); }
+    .t-camp:hover  { box-shadow: var(--shadow-hover-blue); }
+    .t-full:hover  { box-shadow: var(--shadow-hover-amber); }
+
+    .p-badge {
+      display: inline-block;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; padding: 3px 10px;
+      border-radius: var(--r-tag); margin-bottom: 14px;
+    }
+    .b-teal  { background:rgba(0,180,166,0.12);  color:var(--teal);  border:1px solid rgba(0,180,166,0.22); }
+    .b-blue  { background:rgba(59,158,255,0.12); color:var(--blue);  border:1px solid rgba(59,158,255,0.22); }
+    .b-amber { background:rgba(245,166,35,0.12); color:var(--amber); border:1px solid rgba(245,166,35,0.22); }
+
+    .p-price {
+      font-size: 34px; font-weight: 800; letter-spacing: -0.04em;
+      color: #fff; margin: 0 0 6px; line-height: 1.1;
+    }
+    .p-mo { font-size: 16px; font-weight: 300; }
+    .p-price-alt {
+      font-size: 19px; font-weight: 800; letter-spacing: -0.02em;
+      color: #fff; margin: 0 0 8px; line-height: 1.3;
+    }
+    .p-list { list-style:none; padding:0; margin:12px 0 0; }
+    .p-list li {
+      font-size: 13px; font-weight: 400; color: var(--muted);
+      line-height: 1.6; padding: 3px 0;
+      display: flex; align-items: flex-start; gap: 9px;
+    }
+    .p-list li::before {
+      content: '';
+      display: block;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      margin-top: 8px; flex-shrink: 0;
+      background: var(--muted);
+    }
+    .t-flow  .p-list li::before { background: var(--teal); }
+    .t-camp  .p-list li::before { background: var(--blue); }
+    .t-full  .p-list li::before { background: var(--amber); }
+
+    .step-row {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--muted);
+      text-align: center;
+      padding: 36px 0 20px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .step-row:first-of-type { border-top: none; padding-top: 0; }
+
+    .p-ab {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; margin: 14px 0 0;
+    }
+
+    /* ── FAQ ── */
+    .faq-item { border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .faq-q {
+      width:100%; display:flex; justify-content:space-between; align-items:center;
+      padding: 22px 0; background:none; border:none; color:#fff;
+      font-family: var(--font); font-size:16px; font-weight:600;
+      text-align:left; cursor:pointer; min-height:48px;
+      transition: color 0.14s ease;
+    }
+    .faq-q:hover { color: var(--blue); }
+    .faq-q:focus-visible { outline:2px solid var(--blue); outline-offset:4px; border-radius:4px; }
+    .faq-q:active { opacity:0.75; }
+    .faq-icon {
+      width:20px; height:20px; flex-shrink:0; margin-left:20px;
+      transition: transform 0.24s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-a {
+      overflow:hidden; max-height:0; opacity:0;
+      transition: max-height 0.32s ease, opacity 0.28s ease;
+    }
+    .faq-item.open .faq-a { max-height:600px; opacity:1; }
+    .faq-a p {
+      padding-bottom:24px; color:var(--muted);
+      font-weight:300; line-height:1.75; font-size:15px; margin:0;
+    }
+
+    /* ── VIDEO THUMB ── */
+    .v-thumb {
+      position:relative; display:block;
+      width:100%; aspect-ratio:16/9;
+      overflow:hidden; border-radius:12px;
+      background:#0C1935;
+      border:none; outline:none; box-shadow:none;
+      cursor:pointer; text-decoration:none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .v-thumb:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover-blue); }
+    .v-thumb img { width:100%; height:100%; object-fit:cover; display:block; border-radius:0; }
+    .v-thumb::after {
+      content:'';
+      position:absolute; inset:0;
+      background:linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 55%);
+    }
+    .v-play {
+      position:absolute; top:50%; left:50%;
+      transform: translate(-50%,-50%);
+      z-index:2; width:52px; height:52px;
+      background: rgba(255,255,255,0.88);
+      border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .v-thumb:hover .v-play { transform: translate(-50%,-50%) scale(1.1); }
+    .v-thumb:focus-visible { outline:2px solid var(--blue); outline-offset:3px; border-radius:12px; }
+    .v-thumb:not(:focus-visible) { outline:none; border:none; box-shadow:none; }
+    .v-play svg { fill:#0C1935; margin-left:3px; }
+
+    /* ── YOUTUBE GRID ── */
+    .yt-grid {
+      display: grid; grid-template-columns: 1fr; gap: 14px;
+    }
+    @media(min-width:640px)  { .yt-grid { grid-template-columns:1fr 1fr; } }
+    @media(min-width:1024px) { .yt-grid { grid-template-columns:1fr 1fr 1fr; } }
+
+
+    /* Mobile cs-band text wrapping */
+    @media(max-width:479px){
+      .cs-band { flex-direction:column; align-items:flex-start; gap:4px; padding:14px 20px; }
+      .cs-grid  { padding:24px 20px 28px; }
+    }
+    /* Functional Patterns stats: single col on mobile */
+    @media(max-width:639px){
+      .fp-stats { grid-template-columns:1fr !important; gap:20px !important; padding:24px 20px !important; }
+      .fp-stats .stat-num { font-size:32px; }
+      /* Dashboard image crop height smaller on mobile */
+      .cs-img-crop { height:140px !important; }
+      .cs-img-crop img { height:280px !important; }
+    }
+
+    /* ── TESTIMONIAL CARDS ── */
+    .t-grid {
+      display:grid; grid-template-columns:1fr; gap:14px;
+    }
+    @media(min-width:768px){ .t-grid { grid-template-columns:1fr 1fr; } }
+    .t-card {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: var(--r-card);
+      padding: 32px;
+      box-shadow: var(--shadow-card);
+    }
+
+    /* ── STARS ── */
+    .stars { color: var(--amber); font-size:15px; letter-spacing:2px; }
+
+    /* ── TAG PILL ── */
+    .tag {
+      display:inline-block; font-size:11px; font-weight:500;
+      padding: 4px 10px; border-radius: var(--r-tag);
+      background: rgba(255,255,255,0.05);
+      color: var(--muted);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* footer */
+    footer {
+      background: #07090F;
+      border-top: 1px solid rgba(255,255,255,0.055);
+      padding: 72px 0 44px;
+    }
+
+    /* Count-up: hidden until animated */
+    [data-count] { display:inline; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════ NAV ═══════════════════════════════ -->
+<nav id="nav" role="navigation" aria-label="Main navigation">
+  <div class="wrap nav-inner">
+    <a href="#" class="nav-logo" aria-label="SecondWave Inbox — home">
+      <img src="/brand_assets/SecondWave_Logo_1.png" alt="SecondWave Inbox">
+    </a>
+
+    <div class="nav-links">
+      <a href="#" class="nav-link">Home</a>
+      <a href="#case-studies" class="nav-link">Case Studies</a>
+      <a href="#work" class="nav-link">Work</a>
+      <a href="#process" class="nav-link">Pricing</a>
+      <a href="#faqs" class="nav-link">FAQs</a>
+    </div>
+
+    <a href="https://calendly.com/eesawithsecondwave/sw-audit"
+       target="_blank" rel="noopener noreferrer"
+       class="btn btn-blue nav-cta-d">
+      Book a Call
+    </a>
+
+    <button id="hamburger" aria-label="Open menu" aria-expanded="false">
+      <span class="hline"></span>
+      <span class="hline"></span>
+      <span class="hline"></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile overlay -->
+<div id="mob-menu" role="dialog" aria-modal="true" aria-label="Site navigation">
+  <button id="mob-close" aria-label="Close menu">&#x2715;</button>
+  <a href="#"             class="mob-link" onclick="closeMenu()">Home</a>
+  <a href="#case-studies" class="mob-link" onclick="closeMenu()">Case Studies</a>
+  <a href="#work"         class="mob-link" onclick="closeMenu()">Work</a>
+  <a href="#process"      class="mob-link" onclick="closeMenu()">Pricing</a>
+  <a href="#faqs"         class="mob-link" onclick="closeMenu()">FAQs</a>
+  <a href="https://calendly.com/eesawithsecondwave/sw-audit"
+     target="_blank" rel="noopener noreferrer"
+     class="btn btn-blue btn-fw" style="margin-top:8px;" onclick="closeMenu()">
+    Book a Call
+  </a>
+</div>
+
+
+<!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
+<section id="hero">
+  <!-- Faint wave emblem background -->
+  <img src="/brand_assets/SecondWave_Logo_1.png"
+       class="hero-wave"
+       alt=""
+       aria-hidden="true"
+       loading="eager">
+
+  <!-- Radial glow -->
+  <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);
+              width:800px;height:600px;pointer-events:none;z-index:0;
+              background:radial-gradient(ellipse at 50% 30%, rgba(59,158,255,0.1) 0%, transparent 65%);">
+  </div>
+
+  <div class="wrap hero-content txt-center" style="width:100%;">
+    <p class="eyebrow" style="margin-bottom:16px;">For eCommerce brand owners</p>
+    <h1 class="display"
+        style="font-size:clamp(32px,4.5vw,56px);max-width:860px;margin:0 auto 20px;line-height:1.05;">
+      Two weeks.<br>What we build compounds<br>Whether you stay or not.
+    </h1>
+    <p class="subhead body-max"
+       style="font-size:clamp(16px,1.4vw,18px);margin:0 auto 16px;">
+      Retention-first email and SMS systems built inside your Klaviyo account.
+      No discount blasts. No fluff. Revenue that keeps running after day 14.
+    </p>
+    <p style="font-size:16px;font-weight:300;color:rgba(255,255,255,0.5);margin:0 0 20px;">
+      See exactly how we run it. &#x2193;
+    </p>
+    <!-- VSL placeholder -->
+    <div style="max-width:780px;height:280px;margin:0 auto 24px;
+                border-radius:16px;overflow:hidden;
+                background:#080F1A;
+                border:1px solid rgba(255,255,255,0.07);
+                box-shadow:0 2px 4px rgba(0,0,0,0.5),0 24px 80px rgba(0,0,0,0.45);
+                display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;">
+      <div style="width:80px;height:80px;border-radius:50%;
+                  background:rgba(255,255,255,0.06);
+                  border:1px solid rgba(255,255,255,0.1);
+                  display:flex;align-items:center;justify-content:center;">
+        <svg width="28" height="28" viewBox="0 0 24 24">
+          <polygon points="6,3 20,12 6,21" fill="rgba(255,255,255,0.3)"/>
+        </svg>
+      </div>
+      <p style="color:var(--muted);font-size:13px;margin:0;font-weight:400;">Video coming soon</p>
+    </div>
+    <a href="https://calendly.com/eesawithsecondwave/sw-audit"
+       target="_blank" rel="noopener noreferrer"
+       class="btn btn-blue btn-fw"
+       style="font-size:15px;padding:15px 40px;">
+      Book a Strategy Call
+    </a>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ CLIENT LOGOS ═══════════════════════════════ -->
+<section id="logos" style="padding:56px 0;overflow:hidden;">
+  <p class="eyebrow" style="text-align:center;width:100%;display:block;margin-bottom:24px;">
+    trusted by growing ecommerce brands
+  </p>
+  <div style="position:relative;overflow:hidden;
+              -webkit-mask-image:linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%);
+              mask-image:linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%);">
+    <div class="slider-track">
+      <!-- set 1 -->
+      <img src="/brand_assets/logo_functional_patterns.png" alt="Functional Patterns" style="height:52px;width:auto;object-fit:contain;opacity:0.85;">
+      <img src="/brand_assets/logo_goclean.png" alt="Go Clean" style="height:52px;width:auto;object-fit:contain;opacity:0.85;">
+      <img src="/brand_assets/logo_alghani_traders.png" alt="Al-Ghani Traders" style="height:52px;width:auto;object-fit:contain;opacity:0.85;">
+      <img src="/brand_assets/logo_hippie_skin.png" alt="Hippie Skin" style="height:52px;width:auto;object-fit:contain;opacity:0.85;">
+      <!-- set 2 -->
+      <img src="/brand_assets/logo_functional_patterns.png" aria-hidden="true" style="height:52px;width:auto;object-fit:contain;opacity:0.85;">
+      <img src="/brand_assets/logo_goclean.png" aria-hidden="true" style="height:52px;width:auto;object-fit:contain;opacity:0.85;">
+      <img src="/brand_assets/logo_alghani_traders.png" aria-hidden="true" style="height:52px;width:auto;object-fit:contain;opacity:0.85;">
+      <img src="/brand_assets/logo_hippie_skin.png" aria-hidden="true" style="height:52px;width:auto;object-fit:contain;opacity:0.85;">
+      <!-- set 3 -->
+      <img src="/brand_assets/logo_functional_patterns.png" aria-hidden="true" style="height:52px;width:auto;object-fit:contain;opacity:0.85;">
+      <img src="/brand_assets/logo_goclean.png" aria-hidden="true" style="height:52px;width:auto;object-fit:contain;opacity:0.85;">
+      <img src="/brand_assets/logo_alghani_traders.png" aria-hidden="true" style="height:52px;width:auto;object-fit:contain;opacity:0.85;">
+      <img src="/brand_assets/logo_hippie_skin.png" aria-hidden="true" style="height:52px;width:auto;object-fit:contain;opacity:0.85;">
+      <!-- duplicate sets 1-3 for seamless loop -->
+      <img src="/brand_assets/logo_functional_patterns.png" aria-hidden="true" style="height:52px;width:auto;object-fit:contain;opacity:0.85;">
+      <img src="/brand_assets/logo_goclean.png" aria-hidden="true" style="height:52px;width:auto;object-fit:contain;opacity:0.85;">
+      <img src="/brand_assets/logo_alghani_traders.png" aria-hidden="true" style="height:52px;width:auto;object-fit:contain;opacity:0.85;">
+      <img src="/brand_assets/logo_hippie_skin.png" aria-hidden="true" style="height:52px;width:auto;object-fit:contain;opacity:0.85;">
+      <img src="/brand_assets/logo_functional_patterns.png" aria-hidden="true" style="height:52px;width:auto;object-fit:contain;opacity:0.85;">
+      <img src="/brand_assets/logo_goclean.png" aria-hidden="true" style="height:52px;width:auto;object-fit:contain;opacity:0.85;">
+      <img src="/brand_assets/logo_alghani_traders.png" aria-hidden="true" style="height:52px;width:auto;object-fit:contain;opacity:0.85;">
+      <img src="/brand_assets/logo_hippie_skin.png" aria-hidden="true" style="height:52px;width:auto;object-fit:contain;opacity:0.85;">
+      <img src="/brand_assets/logo_functional_patterns.png" aria-hidden="true" style="height:52px;width:auto;object-fit:contain;opacity:0.85;">
+      <img src="/brand_assets/logo_goclean.png" aria-hidden="true" style="height:52px;width:auto;object-fit:contain;opacity:0.85;">
+      <img src="/brand_assets/logo_alghani_traders.png" aria-hidden="true" style="height:52px;width:auto;object-fit:contain;opacity:0.85;">
+      <img src="/brand_assets/logo_hippie_skin.png" aria-hidden="true" style="height:52px;width:auto;object-fit:contain;opacity:0.85;">
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ WORK ═══════════════════════════════ -->
+<section id="work">
+  <div class="wrap">
+    <div class="txt-center" style="margin-bottom:48px;">
+      <p class="eyebrow" style="margin-bottom:16px;">Our Work</p>
+      <h2 class="h2" style="font-size:clamp(28px,4vw,50px);margin:0;">
+        Designs built to move customers forward.
+      </h2>
+    </div>
+
+    <!-- Arrow controls -->
+    <div style="display:flex;gap:10px;justify-content:center;margin-bottom:24px;">
+      <button class="arrow-btn" id="wp" aria-label="Previous emails">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
+          <path d="M15 19l-7-7 7-7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button class="arrow-btn" id="wn" aria-label="Next emails">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24">
+          <path d="M9 5l7 7-7 7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="work-carousel" id="wc">
+      <div class="work-card"><img src="/brand_assets/email_1.png"  alt="Email design 1"  loading="lazy"></div>
+      <div class="work-card"><img src="/brand_assets/email_2.png"  alt="Email design 2"  loading="lazy"></div>
+      <div class="work-card"><img src="/brand_assets/email_3.png"  alt="Email design 3"  loading="lazy"></div>
+      <div class="work-card"><img src="/brand_assets/email_4.png"  alt="Email design 4"  loading="lazy"></div>
+      <div class="work-card"><img src="/brand_assets/email_5.png"  alt="Email design 5"  loading="lazy"></div>
+      <div class="work-card"><img src="/brand_assets/email_6.png"  alt="Email design 6"  loading="lazy"></div>
+      <div class="work-card"><img src="/brand_assets/email_7.png"  alt="Email design 7"  loading="lazy"></div>
+      <div class="work-card"><img src="/brand_assets/email_8.png"  alt="Email design 8"  loading="lazy"></div>
+      <div class="work-card"><img src="/brand_assets/email_9.png"  alt="Email design 9"  loading="lazy"></div>
+      <div class="work-card"><img src="/brand_assets/email_10.png" alt="Email design 10" loading="lazy"></div>
+      <div class="work-card"><img src="/brand_assets/email_11.png" alt="Email design 11" loading="lazy"></div>
+      <div class="work-card"><img src="/brand_assets/email_12.png" alt="Email design 12" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ CASE STUDY ═══════════════════════════════ -->
+<section id="case-studies" style="background:linear-gradient(180deg,#0A1528 0%,var(--navy) 100%);">
+  <div class="wrap">
+    <div class="txt-center" style="margin-bottom:52px;">
+      <p class="eyebrow" style="margin-bottom:16px;">Proof</p>
+      <h2 class="h2" style="font-size:clamp(28px,4vw,50px);margin:0;">
+        Where strategy makes the difference.
+      </h2>
+    </div>
+
+    <!-- PRIMARY CARD: Go Clean -->
+    <div class="cs-feat" style="max-width:1060px;margin:0 auto 24px;">
+      <!-- Header band -->
+      <div class="cs-band" style="background:var(--blue);border-radius:var(--r-feat) var(--r-feat) 0 0;">
+        <span style="font-weight:800;font-size:22px;letter-spacing:-0.03em;color:#fff;">Go Clean</span>
+        <span style="font-weight:300;font-size:14px;color:rgba(255,255,255,0.8);">Full Retention Build</span>
+      </div>
+
+      <div class="cs-grid">
+        <!-- LEFT: BEFORE -->
+        <div>
+          <span class="badge-before">Before</span>
+          <p style="font-size:12px;color:var(--muted);margin:0 0 24px;">Sep 1 — Oct 31, 2025</p>
+          <div style="display:flex;flex-direction:column;gap:20px;">
+            <div>
+              <span class="stat-num" style="color:rgba(255,255,255,0.55);">49.25%</span>
+              <span class="stat-lbl">Email attribution of total revenue</span>
+            </div>
+            <div>
+              <span class="stat-num" style="color:rgba(255,255,255,0.55);">$0.00</span>
+              <span class="stat-lbl">Flow revenue</span>
+            </div>
+            <div>
+              <span class="stat-num" style="color:rgba(255,255,255,0.55);">36.6%</span>
+              <span class="stat-lbl">Open rate</span>
+            </div>
+            <div>
+              <span class="stat-num" style="color:rgba(255,255,255,0.55);">6.04%</span>
+              <span class="stat-lbl">Bounce rate</span>
+            </div>
+            <div>
+              <p style="font-size:13px;color:var(--muted);margin:0;line-height:1.5;">
+                Sign-up form not collecting emails
+              </p>
+            </div>
+          </div>
+          <!-- Klaviyo before dashboard -->
+          <div style="margin-top:28px;border-radius:8px;overflow:hidden;
+                      border:1px solid rgba(255,255,255,0.06);height:200px;" class="cs-img-crop">
+            <img src="/brand_assets/klaviyo_before.png"
+                 alt="Klaviyo dashboard — before"
+                 loading="lazy"
+                 style="width:100%;height:200px;object-fit:cover;object-position:top;">
+          </div>
+        </div>
+
+        <!-- RIGHT: AFTER -->
+        <div>
+          <span class="badge-after">After</span>
+          <p style="font-size:12px;color:var(--muted);margin:0 0 24px;">Oct 31 — Dec 2, 2025</p>
+          <div style="display:flex;flex-direction:column;gap:20px;">
+            <div>
+              <span class="stat-num" style="color:var(--blue);"
+                    data-count data-target="81.79" data-suffix="%" data-decimals="2">81.79%</span>
+              <span class="stat-lbl">Email attribution of total revenue</span>
+            </div>
+            <div>
+              <span class="stat-num" style="color:var(--blue);"
+                    data-count data-target="1385" data-prefix="+" data-suffix="%" data-decimals="0">+1,385%</span>
+              <span class="stat-lbl">Period over period</span>
+            </div>
+            <div>
+              <span class="stat-num" style="color:var(--blue);"
+                    data-count data-target="212" data-prefix="+" data-suffix="%" data-decimals="0">+212%</span>
+              <span class="stat-lbl">Total revenue vs prior period</span>
+            </div>
+            <div>
+              <span class="stat-num" style="color:var(--blue);"
+                    data-count data-target="62.9" data-suffix="%" data-decimals="1">62.9%</span>
+              <span class="stat-lbl">Open rate</span>
+            </div>
+            <div>
+              <span class="stat-num" style="color:var(--blue);"
+                    data-count data-target="0.32" data-suffix="%" data-decimals="2">0.32%</span>
+              <span class="stat-lbl">Bounce rate</span>
+            </div>
+            <div>
+              <span class="stat-num" style="color:var(--blue);"
+                    data-count data-target="12" data-suffix="%" data-decimals="0">12%</span>
+              <span class="stat-lbl">Form opt-in rate (industry avg under 8%)</span>
+            </div>
+          </div>
+          <!-- Klaviyo after dashboard -->
+          <div style="margin-top:28px;border-radius:8px;overflow:hidden;
+                      border:1px solid rgba(255,255,255,0.06);height:200px;" class="cs-img-crop">
+            <img src="/brand_assets/klaviyo_after.png"
+                 alt="Klaviyo dashboard — after"
+                 loading="lazy"
+                 style="width:100%;height:200px;object-fit:cover;object-position:top;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECONDARY CARD: Functional Patterns -->
+    <div class="cs-feat" style="max-width:1060px;margin:0 auto 52px;">
+      <div class="cs-band" style="background:var(--teal);border-radius:var(--r-feat) var(--r-feat) 0 0;">
+        <span style="font-weight:800;font-size:20px;letter-spacing:-0.03em;color:#fff;">Functional Patterns</span>
+        <span style="font-weight:300;font-size:14px;color:rgba(255,255,255,0.85);">Retention Build</span>
+      </div>
+      <div class="fp-stats" style="padding:36px 32px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px;text-align:center;">
+        <div>
+          <span class="stat-num" style="color:var(--teal);"
+                data-count data-target="977694.81" data-prefix="$" data-decimals="0">$977,694</span>
+          <span class="stat-lbl" style="text-align:center;">Attributed revenue</span>
+        </div>
+        <div>
+          <span class="stat-num" style="color:var(--teal);"
+                data-count data-target="40.79" data-suffix="%" data-decimals="2">40.79%</span>
+          <span class="stat-lbl" style="text-align:center;">Of total revenue driven by email</span>
+        </div>
+        <div>
+          <span class="stat-num" style="color:var(--teal);"
+                data-count data-target="8" data-suffix="+" data-decimals="0">8+</span>
+          <span class="stat-lbl" style="text-align:center;">Flows built</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="txt-center">
+      <a href="https://calendly.com/eesawithsecondwave/sw-audit"
+         target="_blank" rel="noopener noreferrer"
+         class="btn btn-blue btn-fw"
+         style="font-size:15px;padding:15px 40px;">
+        Book a Strategy Call
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ TESTIMONIALS ═══════════════════════════════ -->
+<section id="testimonials">
+  <div class="wrap">
+    <div class="txt-center" style="margin-bottom:52px;">
+      <p class="eyebrow" style="margin-bottom:16px;">What Clients Say</p>
+      <h2 class="h2" style="font-size:clamp(28px,4vw,50px);margin:0;">
+        Don't take our word for it.
+      </h2>
+    </div>
+
+    <!-- Featured video + quote -->
+    <div style="max-width:860px;margin:0 auto 24px;
+                background:rgba(255,255,255,0.025);
+                border:1px solid rgba(255,255,255,0.07);
+                border-radius:var(--r-feat);
+                box-shadow:var(--shadow-feat);
+                overflow:hidden;">
+      <!-- HASHIM VIDEO: paste YouTube embed here when ready -->
+      <div style="padding-bottom:56.25%;position:relative;background:#07090F;">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;
+                    justify-content:center;flex-direction:column;gap:14px;">
+          <div style="width:72px;height:72px;border-radius:50%;
+                      background:rgba(59,158,255,0.08);
+                      border:1px solid rgba(59,158,255,0.18);
+                      display:flex;align-items:center;justify-content:center;">
+            <svg width="26" height="26" viewBox="0 0 24 24">
+              <polygon points="6,3 20,12 6,21" fill="#3B9EFF"/>
+            </svg>
+          </div>
+          <p style="color:var(--muted);font-size:13px;margin:0;">Video testimonial coming soon</p>
+        </div>
+      </div>
+      <div style="padding:36px 40px 40px;">
+        <p style="font-size:clamp(17px,2vw,22px);font-weight:300;line-height:1.65;
+                  color:rgba(255,255,255,0.85);margin:0 0 20px;font-style:italic;">
+          "SecondWave took our email marketing from little to no sales to a channel that started generating
+          real revenue. They rebuilt our flows, improved abandoned cart performance, and approached everything
+          strategically by first understanding our audience. Highly recommend."
+        </p>
+        <p style="font-size:15px;font-weight:600;color:#fff;margin:0;">
+          Hashim
+          <span style="font-weight:300;color:var(--muted);"> / Go Clean</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- Two written cards -->
+    <div class="t-grid" style="max-width:860px;margin:0 auto;">
+      <div class="t-card">
+        <div class="stars" style="margin-bottom:16px;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p style="font-size:15px;font-weight:300;line-height:1.75;color:var(--muted);
+                  margin:0 0 20px;font-style:italic;">
+          "Josh and Eesa were easy to work with, were able to adapt to our needs as the project progressed.
+          We are happy with the service they provided. They created extra emails to help fill gaps in our
+          flows. Really appreciate their help and design skills for user-friendly and eye-catching emails."
+        </p>
+        <p style="font-size:14px;font-weight:600;color:#fff;margin:0 0 4px;">Alicia T.</p>
+        <p style="font-size:13px;color:var(--muted);margin:0 0 16px;">Fitness Brand</p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <span class="tag">Collaborative</span>
+          <span class="tag">Committed to Quality</span>
+          <span class="tag">Solution Oriented</span>
+          <span class="tag">Clear Communicator</span>
+        </div>
+      </div>
+
+      <div class="t-card">
+        <div class="stars" style="margin-bottom:16px;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p style="font-size:14px;font-weight:600;color:#fff;margin:0 0 4px;">
+          Klaviyo Email Design Specialist
+        </p>
+        <p style="font-size:13px;color:var(--muted);margin:0 0 20px;">Missouri City, USA</p>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <span class="tag">Committed to Quality</span>
+          <span class="tag">Clear Communicator</span>
+          <span class="tag">Detail Oriented</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ PRICING ═══════════════════════════════ -->
+<section id="process" style="background:linear-gradient(180deg,var(--navy) 0%,#0A1528 100%);">
+  <div class="wrap">
+    <div class="txt-center" style="margin-bottom:16px;">
+      <p class="eyebrow" style="margin-bottom:16px;">How It Works</p>
+      <h2 class="h2" style="font-size:clamp(28px,4vw,50px);margin:0 0 16px;">
+        It all starts in two weeks.
+      </h2>
+      <p class="subhead body-max" style="font-size:17px;margin:0 auto;">
+        Every track starts with a two-week pilot. You pay upfront. You own everything we build.
+        Then you decide what comes next.
+      </p>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="step-row">STEP 1 &nbsp;&mdash;&nbsp; TWO-WEEK PILOT (DAYS 1-14)</div>
+    <div class="pricing-grid">
+      <div class="p-card t-flow">
+        <span class="p-badge b-teal">Flow Focus</span>
+        <p class="p-price">$749</p>
+        <ul class="p-list">
+          <li>Highest leaking flow rebuilt</li>
+          <li>Pop-up optimized</li>
+          <li>Surface level segmentation</li>
+          <li>Surface level deliverability watch</li>
+          <li>All assets handed over day 14</li>
+        </ul>
+      </div>
+      <div class="p-card t-camp">
+        <span class="p-badge b-blue">Campaigns Focus</span>
+        <p class="p-price">$749</p>
+        <ul class="p-list">
+          <li>4-6 campaigns written and sent</li>
+          <li>Campaign copy and send strategy</li>
+          <li>Segment selection per send</li>
+          <li>No flows or pop-up included</li>
+          <li>Execution focused</li>
+        </ul>
+      </div>
+      <div class="p-card t-full">
+        <span class="p-badge b-amber">Full Stack</span>
+        <p class="p-price">$899</p>
+        <ul class="p-list">
+          <li>Highest leaking flow rebuilt</li>
+          <li>Pop-up optimized</li>
+          <li>Surface level segmentation</li>
+          <li>Surface level deliverability watch</li>
+          <li>All assets handed over day 14</li>
+          <li>4-6 campaigns written and sent</li>
+        </ul>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--muted);text-align:center;margin:14px 0 0;font-style:italic;">
+      Two-week pilot is paid in full upfront.
+    </p>
+
+    <!-- STEP 2 -->
+    <div class="step-row">STEP 2 &nbsp;&mdash;&nbsp; FULL BUILD</div>
+    <div class="pricing-grid">
+      <div class="p-card t-flow">
+        <span class="p-badge b-teal">Flow Concentration</span>
+        <p class="p-price">$649</p>
+        <ul class="p-list">
+          <li>All remaining flows built</li>
+          <li>Welcome, post-purchase, win-back</li>
+          <li>Browse and checkout abandonment</li>
+          <li>Sunset flow included</li>
+          <li>Segmentation deepened</li>
+          <li>Pop-up refined if needed</li>
+          <li>All assets handed over</li>
+        </ul>
+      </div>
+      <div class="p-card t-camp">
+        <span class="p-badge b-blue">Campaigns Concentration</span>
+        <p class="p-price-alt">Straight to ongoing management</p>
+        <ul class="p-list">
+          <li>No build phase</li>
+          <li>Campaign management is ongoing</li>
+          <li>Moves directly to ongoing management</li>
+        </ul>
+      </div>
+      <div class="p-card t-full">
+        <span class="p-badge b-amber">Full Stack Completion</span>
+        <p class="p-price">$2,499</p>
+        <ul class="p-list">
+          <li>All remaining flows built</li>
+          <li>Welcome, post-purchase, win-back</li>
+          <li>Browse and checkout abandonment</li>
+          <li>Sunset flow included</li>
+          <li>Full campaign calendar built</li>
+          <li>Campaigns written and sent throughout</li>
+          <li>Segmentation deepened</li>
+          <li>Live infrastructure and data to day 60</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-row">STEP 3 &nbsp;&mdash;&nbsp; ONGOING MANAGEMENT</div>
+    <div class="pricing-grid">
+      <div class="p-card t-flow">
+        <span class="p-badge b-teal">Flow Upkeep</span>
+        <p class="p-price">$1,597<span class="p-mo">/mo</span></p>
+        <ul class="p-list">
+          <li>All flow maintenance and optimization</li>
+          <li>Additional flows built as needed</li>
+          <li>Sunset flow management</li>
+          <li>Deliverability monitoring</li>
+          <li>Monthly performance review</li>
+          <li>Client handles campaign sends</li>
+        </ul>
+        <p class="p-ab" style="color:var(--teal);">Includes A/B testing</p>
+      </div>
+      <div class="p-card t-camp">
+        <span class="p-badge b-blue">Campaigns Upkeep</span>
+        <p class="p-price">$1,997<span class="p-mo">/mo</span></p>
+        <ul class="p-list">
+          <li>2-3 campaigns per week</li>
+          <li>Copy written and sent by you</li>
+          <li>Segment selection per send</li>
+          <li>Campaign calendar managed monthly</li>
+          <li>Monthly performance report</li>
+        </ul>
+        <p class="p-ab" style="color:var(--blue);">Includes A/B testing</p>
+      </div>
+      <div class="p-card t-full">
+        <span class="p-badge b-amber">Full Stack Upkeep</span>
+        <p class="p-price">$2,150<span class="p-mo">/mo</span></p>
+        <ul class="p-list">
+          <li>All flow optimization and maintenance</li>
+          <li>Additional flows built as needed</li>
+          <li>Segmentation updates</li>
+          <li>Deliverability monitoring</li>
+          <li>Monthly reporting</li>
+          <li>Zero email workload for client</li>
+        </ul>
+        <p style="font-size:12px;color:rgba(160,174,192,0.55);margin:10px 0 4px;line-height:1.5;">
+          Three tracks built before you're done? Reduces to $1,750/mo
+        </p>
+        <p class="p-ab" style="color:var(--amber);">Includes A/B testing</p>
+      </div>
+    </div>
+
+    <p style="font-size:13px;color:rgba(138,155,191,0.6);text-align:center;
+              margin:18px 0 48px;font-style:italic;">
+      Flows or campaigns partially built? Pricing and scope vary, discussed case by case.
+    </p>
+
+    <!-- Standalone Deliverability Fix -->
+    <div style="max-width:600px;margin:0 auto 52px;
+                background:rgba(255,255,255,0.02);
+                border:1px solid rgba(255,255,255,0.07);
+                border-radius:var(--r-card);
+                padding:28px 28px 32px;">
+      <p style="font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
+                color:var(--muted);margin:0 0 8px;">
+        Standalone — Unqualified Leads Only
+      </p>
+      <h3 style="font-size:20px;font-weight:800;letter-spacing:-0.03em;margin:0 0 8px;">
+        Deliverability Fix
+      </h3>
+      <p style="font-size:32px;font-weight:800;letter-spacing:-0.04em;margin:0 0 16px;">$447</p>
+      <ul class="p-list" style="margin-top:0;">
+        <li>Broken sender reputation repair</li>
+        <li>SPF, DKIM, DMARC setup</li>
+        <li>List cleaning and warm-up structure</li>
+      </ul>
+    </div>
+
+    <div class="txt-center">
+      <p style="color:var(--muted);font-size:15px;margin:0 0 18px;">Not sure which fits?</p>
+      <a href="https://calendly.com/eesawithsecondwave/sw-audit"
+         target="_blank" rel="noopener noreferrer"
+         class="btn btn-blue btn-fw"
+         style="font-size:15px;padding:15px 40px;">
+        Book a call
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ FAQ ═══════════════════════════════ -->
+<section id="faqs">
+  <div class="wrap" style="max-width:800px;">
+    <div class="txt-center" style="margin-bottom:52px;">
+      <p class="eyebrow" style="margin-bottom:16px;">FAQ</p>
+      <h2 class="h2" style="font-size:clamp(28px,4vw,50px);margin:0;">
+        Good questions deserve straight answers.
+      </h2>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" aria-expanded="false">
+        What if we already have someone handling email?
+        <svg class="faq-icon" viewBox="0 0 24 24" fill="none">
+          <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="faq-a"><p>Most brands that come to us have tried something before. An agency, a freelancer, someone in house. We are not here to replace anyone or bump heads with your team. We come in, look at what exists, build on top of it, and make it better. Whatever is already running stays. We just close the gaps.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" aria-expanded="false">
+        Do you work with smaller brands?
+        <svg class="faq-icon" viewBox="0 0 24 24" fill="none">
+          <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="faq-a"><p>The two-week build works for any size. We come in, fix what is leaking, and hand everything over. What we build is based on strategies pulled from studying 47 agencies and 450+ brands.</p><p style="padding-top:8px;">Results from paid traffic or acquisition are not in our scope and we will never promise what we cannot control. But the infrastructure we leave behind is built to convert whatever traffic you are already getting.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" aria-expanded="false">
+        Who is actually doing the work?
+        <svg class="faq-icon" viewBox="0 0 24 24" fill="none">
+          <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="faq-a"><p>The founders. Eesa and Josh handle every account directly. No handoffs. No junior team. You work with the people who built the system.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" aria-expanded="false">
+        What is the commitment?
+        <svg class="faq-icon" viewBox="0 0 24 24" fill="none">
+          <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="faq-a"><p>Two weeks. That is it to start. You come in, we build, you see what moves. After that you have unlimited upside to continue or walk away with everything we built. No contracts. No pressure.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" aria-expanded="false">
+        Do you only work with Klaviyo?
+        <svg class="faq-icon" viewBox="0 0 24 24" fill="none">
+          <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="faq-a"><p>Yes. We chose Klaviyo because it is the best retention infrastructure available for eCommerce. Going deep on one platform beats spreading thin across five.</p></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" aria-expanded="false">
+        What does it cost?
+        <svg class="faq-icon" viewBox="0 0 24 24" fill="none">
+          <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <div class="faq-a"><p>The two-week pilot starts at $799 USD. Everything is scoped before you pay. No surprises.</p></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ CONTENT ═══════════════════════════════ -->
+<section id="content" style="background:linear-gradient(180deg,#0A1528 0%,var(--navy) 100%);">
+  <div class="wrap">
+    <div class="txt-center" style="margin-bottom:48px;">
+      <p class="eyebrow" style="margin-bottom:16px;">Built in Public</p>
+      <h2 class="h2" style="font-size:clamp(28px,4vw,50px);margin:0 0 14px;">
+        Learn how we think.
+      </h2>
+      <p class="subhead body-max" style="font-size:17px;margin:0 auto;">
+        Free breakdowns on email, retention, and what most brands are getting wrong.
+      </p>
+    </div>
+
+    <!-- YouTube thumbnails -->
+    <div class="yt-grid" style="margin-bottom:52px;">
+      <a href="https://www.youtube.com/watch?v=Pj1dIx8Dxzk"
+         target="_blank" rel="noopener noreferrer" class="v-thumb">
+        <img src="https://img.youtube.com/vi/Pj1dIx8Dxzk/maxresdefault.jpg"
+             alt="SecondWave YouTube — video 1" loading="lazy"
+             onerror="this.src='https://img.youtube.com/vi/Pj1dIx8Dxzk/hqdefault.jpg'">
+        <div class="v-play">
+          <svg width="17" height="17" viewBox="0 0 24 24">
+            <polygon points="6,3 20,12 6,21"/>
+          </svg>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=IiwtMPL7mf4"
+         target="_blank" rel="noopener noreferrer" class="v-thumb">
+        <img src="https://img.youtube.com/vi/IiwtMPL7mf4/maxresdefault.jpg"
+             alt="SecondWave YouTube — video 2" loading="lazy"
+             onerror="this.src='https://img.youtube.com/vi/IiwtMPL7mf4/hqdefault.jpg'">
+        <div class="v-play">
+          <svg width="17" height="17" viewBox="0 0 24 24">
+            <polygon points="6,3 20,12 6,21"/>
+          </svg>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=7DJan8mG8rU"
+         target="_blank" rel="noopener noreferrer" class="v-thumb">
+        <img src="https://img.youtube.com/vi/7DJan8mG8rU/hqdefault.jpg"
+             alt="SecondWave YouTube — video 3" loading="lazy">
+        <div class="v-play">
+          <svg width="17" height="17" viewBox="0 0 24 24">
+            <polygon points="6,3 20,12 6,21"/>
+          </svg>
+        </div>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════ FOOTER ═══════════════════════════════ -->
+<footer>
+  <div class="wrap txt-center" style="display:flex;flex-direction:column;align-items:center;gap:20px;">
+    <!-- Wave mark only — same crop technique as nav -->
+    <div style="height:52px;overflow:hidden;display:flex;justify-content:center;">
+      <img src="/brand_assets/SecondWave_Logo_2.png"
+           alt="SecondWave Inbox"
+           loading="lazy"
+           style="height:96px;width:auto;display:block;mix-blend-mode:screen;">
+    </div>
+    <p style="color:var(--muted);font-size:14px;margin:0;font-weight:300;">
+      Retention via Email + SMS
+    </p>
+    <a href="https://calendly.com/eesawithsecondwave/sw-audit"
+       target="_blank" rel="noopener noreferrer"
+       class="btn btn-blue btn-fw"
+       style="font-size:14px;padding:13px 36px;max-width:280px;width:100%;">
+      Book a Strategy Call
+    </a>
+    <!-- Social icons -->
+    <div style="display:flex;align-items:center;gap:24px;margin:4px 0 0;">
+      <a href="https://www.instagram.com/withsecondwave" target="_blank" rel="noopener noreferrer"
+         aria-label="Instagram" style="color:#fff;opacity:0.6;transition:opacity 0.14s ease;display:flex;"
+         onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+      </a>
+      <a href="https://www.tiktok.com/@withsecondwave" target="_blank" rel="noopener noreferrer"
+         aria-label="TikTok" style="color:#fff;opacity:0.6;transition:opacity 0.14s ease;display:flex;"
+         onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.28 8.28 0 004.84 1.54V6.78a4.85 4.85 0 01-1.07-.09z"/>
+        </svg>
+      </a>
+      <a href="https://www.youtube.com/@withsecondwave" target="_blank" rel="noopener noreferrer"
+         aria-label="YouTube" style="color:#fff;opacity:0.6;transition:opacity 0.14s ease;display:flex;"
+         onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M23.5 6.19a3.02 3.02 0 00-2.12-2.13C19.54 3.5 12 3.5 12 3.5s-7.54 0-9.38.56A3.02 3.02 0 00.5 6.19C0 8.04 0 12 0 12s0 3.96.5 5.81a3.02 3.02 0 002.12 2.13C4.46 20.5 12 20.5 12 20.5s7.54 0 9.38-.56a3.02 3.02 0 002.12-2.13C24 15.96 24 12 24 12s0-3.96-.5-5.81zM9.75 15.52V8.48L15.5 12l-5.75 3.52z"/>
+        </svg>
+      </a>
+      <a href="https://x.com/withsecondwave" target="_blank" rel="noopener noreferrer"
+         aria-label="X (Twitter)" style="color:#fff;opacity:0.6;transition:opacity 0.14s ease;display:flex;"
+         onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.6'">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+      </a>
+    </div>
+    <p style="color:rgba(138,155,191,0.38);font-size:12px;margin:4px 0 0;">
+      &copy; 2026 SecondWave Inbox. Ontario, Canada.
+    </p>
+  </div>
+</footer>
+
+
+<!-- ═══════════════════════════════ JAVASCRIPT ═══════════════════════════════ -->
+<script>
+/* ── Mobile menu ── */
+function openMenu() {
+  document.getElementById('mob-menu').classList.add('open');
+  document.getElementById('hamburger').setAttribute('aria-expanded','true');
+  document.body.style.overflow = 'hidden';
+}
+function closeMenu() {
+  document.getElementById('mob-menu').classList.remove('open');
+  document.getElementById('hamburger').setAttribute('aria-expanded','false');
+  document.body.style.overflow = '';
+}
+document.getElementById('hamburger').addEventListener('click', openMenu);
+document.getElementById('mob-close').addEventListener('click', closeMenu);
+
+/* ── Work carousel arrows ── */
+var wc = document.getElementById('wc');
+function getScrollStep() {
+  return window.innerWidth >= 768 ? wc.offsetWidth : wc.offsetWidth;
+}
+document.getElementById('wp').addEventListener('click', function() {
+  wc.scrollBy({ left: -getScrollStep(), behavior: 'smooth' });
+});
+document.getElementById('wn').addEventListener('click', function() {
+  wc.scrollBy({ left: getScrollStep(), behavior: 'smooth' });
+});
+
+/* ── FAQ accordion ── */
+document.querySelectorAll('.faq-q').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var item = this.closest('.faq-item');
+    var isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(function(i) {
+      i.classList.remove('open');
+      i.querySelector('.faq-q').setAttribute('aria-expanded','false');
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      this.setAttribute('aria-expanded','true');
+    }
+  });
+});
+
+/* ── Count-up animations ── */
+function countUp(el) {
+  var target   = parseFloat(el.dataset.target);
+  var prefix   = el.dataset.prefix  || '';
+  var suffix   = el.dataset.suffix  || '';
+  var decimals = parseInt(el.dataset.decimals || '0', 10);
+  var duration = 1600;
+  var start    = performance.now();
+
+  function tick(now) {
+    var t    = Math.min((now - start) / duration, 1);
+    var ease = 1 - Math.pow(1 - t, 3);
+    var val  = ease * target;
+    var fmt;
+    if (decimals === 0) {
+      fmt = Math.round(val).toLocaleString();
+    } else {
+      fmt = val.toFixed(decimals);
+    }
+    el.textContent = prefix + fmt + suffix;
+    if (t < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+var counters = document.querySelectorAll('[data-count]');
+var seen = new Set();
+var io = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting && !seen.has(entry.target)) {
+      seen.add(entry.target);
+      countUp(entry.target);
+    }
+  });
+}, { threshold: 0.4 });
+counters.forEach(function(el) { io.observe(el); });
+</script>
+</body>
+</html>
