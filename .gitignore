@@ -2,3 +2,7 @@ node_modules/
 temporary screenshots/
 screenshot-*.mjs
 brand_assets/sw-apollo-dtc.md
+
+# Local placeholder VSL videos — replace with real files in public/videos/.
+# Remove this rule when committing the real videos for deployment.
+public/videos/*.mp4
