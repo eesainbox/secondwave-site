@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -836,7 +836,53 @@
       fill: none; stroke: var(--blue); stroke-width: 3; stroke-linecap: round;
       stroke-dasharray: 125.66; stroke-dashoffset: 0;
     }
-    .vsl-ring-fg.run { transition: stroke-dashoffset 5s linear; stroke-dashoffset: 125.66; }
+    .vsl-ring-fg.run { transition: stroke-dashoffset 14s linear; stroke-dashoffset: 125.66; }
+
+    /* What-you-keep screen (between bridge and close) */
+    .vsl-keep { align-items: safe center; overflow-y: auto; }
+    .vsl-keep-inner { width: 100%; max-width: 1000px; text-align: center; margin: auto; }
+    .vsl-keep-title {
+      font-family: var(--font);
+      font-weight: 800; letter-spacing: -0.03em; line-height: 1.2;
+      color: #fff; font-size: clamp(18px, 2.4vw, 30px);
+      margin: 0 auto 8px; max-width: 760px;
+    }
+    .vsl-keep-sub {
+      font-family: var(--font); font-weight: 300;
+      color: rgba(255,255,255,0.7); font-size: clamp(13px, 1.6vw, 16px);
+      margin: 0 auto 24px; max-width: 560px;
+    }
+    .vsl-keep-grid {
+      display: flex; gap: 14px; justify-content: center;
+      align-items: stretch; flex-wrap: wrap; margin: 0 auto 22px;
+    }
+    .vsl-keep-card {
+      flex: 1 1 260px; max-width: 300px; text-align: left;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 14px; padding: 18px 20px;
+    }
+    .vsl-keep-card-h {
+      font-family: var(--font); font-weight: 700;
+      color: var(--blue); font-size: 15px; letter-spacing: 0.01em;
+      margin: 0 0 12px;
+    }
+    .vsl-keep-card ul { list-style: none; margin: 0; padding: 0; }
+    .vsl-keep-card li {
+      font-family: var(--font); font-weight: 300;
+      color: rgba(255,255,255,0.86); font-size: 13.5px; line-height: 1.5;
+      padding: 0 0 0 18px; margin: 0 0 8px; position: relative;
+    }
+    .vsl-keep-card li:before {
+      content: ''; position: absolute; left: 0; top: 8px;
+      width: 6px; height: 6px; border-radius: 50%; background: var(--blue);
+    }
+    .vsl-keep-go { display: inline-flex; width: auto; min-width: 220px; max-width: 280px; margin: 0 auto; }
+    .vsl-keep-ring .vsl-ring-fg.run { transition-duration: 20s; }
+    @media (max-width: 767px) {
+      .vsl-keep-grid { flex-direction: column; align-items: stretch; }
+      .vsl-keep-card { max-width: 100%; }
+    }
 
     /* Call-ended screen (closes the Google Meet conceit) */
     .vsl-final { background: var(--navy); }
@@ -1018,13 +1064,59 @@
         </svg>
       </div>
 
+      <!-- What-you-keep screen (between bridge and close) -->
+      <div class="vsl-overlay vsl-keep" id="vslKeep" role="dialog" aria-modal="true"
+           aria-labelledby="vslKeepTitle" hidden>
+        <div class="vsl-keep-inner">
+          <p class="vsl-keep-title" id="vslKeepTitle">Whatever you clicked, this is what stays in your brand</p>
+          <p class="vsl-keep-sub">Built in two weeks. Yours to keep, working long after.</p>
+          <div class="vsl-keep-grid">
+            <div class="vsl-keep-card">
+              <p class="vsl-keep-card-h">Flow Focus</p>
+              <ul>
+                <li>The flow leaking the most revenue, rebuilt</li>
+                <li>Sign-up form optimized</li>
+                <li>Segmentation set up</li>
+                <li>Deliverability watched</li>
+                <li>All assets yours forever</li>
+              </ul>
+            </div>
+            <div class="vsl-keep-card">
+              <p class="vsl-keep-card-h">Campaigns Focus</p>
+              <ul>
+                <li>4 to 6 campaigns written and sent</li>
+                <li>Send strategy built around your list</li>
+                <li>The right segment chosen for each send</li>
+                <li>Pure execution, nothing left idle</li>
+                <li>All assets yours forever</li>
+              </ul>
+            </div>
+            <div class="vsl-keep-card">
+              <p class="vsl-keep-card-h">Full Stack</p>
+              <ul>
+                <li>The flow leaking the most revenue, rebuilt</li>
+                <li>Sign-up form optimized</li>
+                <li>Segmentation set up</li>
+                <li>4 to 6 campaigns written and sent</li>
+                <li>All assets yours forever</li>
+              </ul>
+            </div>
+          </div>
+          <button type="button" class="vsl-choice vsl-keep-go" id="vslKeepGo">Keep going</button>
+        </div>
+        <svg class="vsl-ring vsl-keep-ring" id="vslKeepRing" viewBox="0 0 44 44" aria-hidden="true">
+          <circle class="vsl-ring-bg" cx="22" cy="22" r="20"></circle>
+          <circle class="vsl-ring-fg" cx="22" cy="22" r="20"></circle>
+        </svg>
+      </div>
+
       <!-- Call-ended screen -->
       <div class="vsl-overlay vsl-final" id="vslFinal" role="dialog" aria-modal="true"
            aria-labelledby="vslFinalTitle" hidden>
         <div class="vsl-final-inner">
           <p class="vsl-final-title" id="vslFinalTitle">Call ended</p>
           <div class="vsl-final-btns">
-            <a href="https://secondwaveinbox.ca/book" class="btn btn-blue"
+            <a href="https://calendly.com/eesawithsecondwave/sw-audit" target="_blank" rel="noopener" class="btn btn-blue"
                style="font-size:15px;padding:15px 40px;">Book a wavecheck</a>
             <button type="button" class="btn vsl-rejoin" id="vslRejoin"
                     style="font-size:15px;padding:15px 40px;">Rejoin the call</button>
@@ -1033,7 +1125,7 @@
       </div>
 
       <!-- Hang-up sound (optional; screen still works if file is missing) -->
-      <audio id="vslHangup" src="/public/audio/hangup.mp3" preload="auto"></audio>
+      <audio id="vslHangup" src="/audio/hangup.mp3" preload="auto"></audio>
 
       <!-- Controls -->
       <div class="vsl-controls" id="vslControls">
@@ -1809,6 +1901,10 @@ counters.forEach(function(el) { io.observe(el); });
   var ppBtn    = document.getElementById('vslPlayPause');
   var muteBtn  = document.getElementById('vslMute');
   var live     = document.getElementById('vslLive');
+  var keepO    = document.getElementById('vslKeep');
+  var keepRing = document.getElementById('vslKeepRing').querySelector('.vsl-ring-fg');
+  var keepGo   = document.getElementById('vslKeepGo');
+  var keepIdle = null;
 
   var VID = '/videos/';
   var ALL = ['capture', 'convert', 'retain', 'scale'];
@@ -1872,8 +1968,8 @@ counters.forEach(function(el) { io.observe(el); });
   function startTimer(ring, onIdle) {
     void ring.offsetWidth;
     ring.classList.add('run');
-    live.textContent = 'Choose within 5 seconds.';
-    idleTimer = setTimeout(function () { idleTimer = null; onIdle(); }, 5000);
+    live.textContent = 'Choose within 14 seconds.';
+    idleTimer = setTimeout(function () { idleTimer = null; onIdle(); }, 14000);
   }
   function focusFirst(container, sel) {
     var els = container.querySelectorAll(sel || '.vsl-choice');
@@ -2007,7 +2103,26 @@ counters.forEach(function(el) { io.observe(el); });
   });
 
   /* ─────────── close / final ─────────── */
-  function playClose() { playClip('close.mp4', 'close'); }
+  function doClose() { playClip('close.mp4', 'close'); }
+  function playClose() { showKeep(); }
+  function showKeep() {
+    resetVisual();
+    showOverlay(keepO);
+    setTimeout(function () {
+      if (keepO.hasAttribute('hidden')) return;
+      keepRing.classList.add('run');
+      keepGo.focus();
+      keepIdle = setTimeout(function () { keepIdle = null; leaveKeep(); }, 20000);
+    }, 820);
+  }
+  function leaveKeep() {
+    if (keepIdle) { clearTimeout(keepIdle); keepIdle = null; }
+    keepRing.classList.remove('run');
+    void keepRing.offsetWidth;
+    hideOverlay(keepO);
+    resetVisual();
+    doClose();
+  }
   function showFinal() {
     resetVisual();
     controls.classList.remove('force');
@@ -2036,6 +2151,7 @@ counters.forEach(function(el) { io.observe(el); });
     playClip('hook.mp4', 'hook');
   }
   rejoinBtn.addEventListener('click', restartFromHook);
+  keepGo.addEventListener('click', leaveKeep);
 
   /* ─────────── controls ─────────── */
   function updatePP() {
