@@ -271,10 +271,10 @@
       overflow: hidden;
       display: flex;
       align-items: center;
-      padding: 60px 0 40px;
+      padding: 28px 0 30px;
     }
     @media(max-width:767px){
-      #hero { padding: 40px 0 40px; }
+      #hero { padding: 28px 0 36px; }
     }
     .hero-grid-bg {
       position: absolute;
@@ -702,6 +702,203 @@
         overflow: visible;
       }
     }
+
+    /* ═══════════════════════════════════════════
+       VSL INTERACTIVE BRANCHING PLAYER
+    ═══════════════════════════════════════════ */
+    .vsl-stage {
+      position: relative;
+      width: min(100%, calc(66vh * 16 / 9));  /* <= brief's 70vh max; leaves room for CTA on short screens */
+      max-width: 1160px;          /* matches .wrap */
+      margin: 0 auto;
+      aspect-ratio: 16 / 9;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #05080F;
+      box-shadow: var(--shadow-feat);
+      isolation: isolate;
+    }
+    .vsl-video {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      background: #05080F;
+      transform-origin: 50% 50%;
+      transition: transform 1s ease;   /* GTA slow zoom */
+      z-index: 1;
+    }
+    .vsl-video.zoom { transform: scale(1.05); }
+
+    /* Dark wash used by both transitions */
+    .vsl-dark {
+      position: absolute; inset: 0; z-index: 3;
+      background: #05080F;
+      opacity: 0; pointer-events: none;
+      transition: opacity 1s ease;
+    }
+    .vsl-dark.show { opacity: 0.4; }
+
+    /* Poster / play gate */
+    .vsl-poster {
+      position: absolute; inset: 0; z-index: 6;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(to top, rgba(5,8,15,0.55), rgba(5,8,15,0.12));
+      border: none; cursor: pointer; padding: 0;
+      transition: opacity 0.3s ease;
+    }
+    .vsl-poster.hide { opacity: 0; pointer-events: none; }
+    .vsl-playbtn {
+      width: 84px; height: 84px; border-radius: 50%;
+      background: rgba(255,255,255,0.94);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 8px 40px rgba(59,158,255,0.45), 0 2px 8px rgba(0,0,0,0.4);
+      transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .vsl-playbtn svg { fill: #0C1935; margin-left: 5px; }
+    .vsl-poster:hover .vsl-playbtn { transform: scale(1.08); }
+    .vsl-poster:active .vsl-playbtn { transform: scale(0.96); }
+    .vsl-poster:focus-visible { outline: 2px solid var(--blue); outline-offset: -4px; }
+    @media(max-width:480px){ .vsl-playbtn { width:64px; height:64px; } .vsl-playbtn svg { width:26px; height:26px; } }
+
+    .vsl-playbtn.pulse { animation: vsl-pulse 1.6s ease-in-out infinite; }
+    @keyframes vsl-pulse {
+      0%,100% { box-shadow: 0 8px 40px rgba(59,158,255,0.45), 0 0 0 0 rgba(59,158,255,0.55); }
+      50%     { box-shadow: 0 8px 40px rgba(59,158,255,0.6), 0 0 0 18px rgba(59,158,255,0); }
+    }
+
+    /* Generic overlay (question / bridge / final) */
+    .vsl-overlay {
+      position: absolute; inset: 0; z-index: 7;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      background: rgba(12,25,53,0.7);   /* deep navy 70% */
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.8s ease;    /* 800ms fade-in */
+    }
+    @supports ((backdrop-filter: blur(8px)) or (-webkit-backdrop-filter: blur(8px))) {
+      .vsl-overlay { -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+    }
+    .vsl-overlay.show { opacity: 1; pointer-events: auto; }
+    .vsl-overlay[hidden] { display: none; }
+
+    /* On mobile the 16:9 stage is too short for the choices, so the decision
+       overlays become a full-viewport modal (the video's dark/zoom wash still
+       plays in the stage behind). */
+    @media (max-width: 767px) {
+      .vsl-overlay { position: fixed; z-index: 250; padding: 28px 22px; overflow-y: auto; }
+    }
+
+    .vsl-q-inner { width: 100%; max-width: 760px; text-align: center; }
+    .vsl-q-text {
+      font-family: var(--font);
+      font-weight: 800; letter-spacing: -0.03em; line-height: 1.2;
+      color: #fff;
+      font-size: clamp(17px, 2.4vw, 28px);
+      margin: 0 auto 22px; max-width: 620px;
+    }
+    .vsl-q-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media(max-width:767px){ .vsl-q-grid { grid-template-columns: 1fr; gap: 10px; } }
+
+    .vsl-choice {
+      min-height: 48px;
+      display: flex; align-items: center; justify-content: center; text-align: center;
+      padding: 12px 18px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+      font-family: var(--font); font-weight: 500; font-size: 14px; line-height: 1.35;
+      cursor: pointer;
+      transition: transform 0.16s ease, background 0.16s ease,
+                  border-color 0.16s ease, box-shadow 0.16s ease;
+    }
+    .vsl-choice:hover {
+      background: rgba(59,158,255,0.18);
+      border-color: var(--blue);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(59,158,255,0.25);
+    }
+    .vsl-choice:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+    .vsl-choice:active { transform: translateY(0); }
+
+    .vsl-bridge-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .vsl-bridge-btns .vsl-choice { flex: 1 1 240px; max-width: 300px; }
+    .vsl-yes { background: rgba(59,158,255,0.2); border-color: var(--blue); }
+
+    /* Timer ring — thin, electric blue, quietly closing on itself */
+    .vsl-ring {
+      position: absolute; top: 14px; right: 14px;
+      width: 40px; height: 40px; z-index: 2;
+      transform: rotate(-90deg);
+    }
+    .vsl-ring-bg { fill: none; stroke: rgba(255,255,255,0.16); stroke-width: 3; }
+    .vsl-ring-fg {
+      fill: none; stroke: var(--blue); stroke-width: 3; stroke-linecap: round;
+      stroke-dasharray: 125.66; stroke-dashoffset: 0;
+    }
+    .vsl-ring-fg.run { transition: stroke-dashoffset 5s linear; stroke-dashoffset: 125.66; }
+
+    /* Call-ended screen (closes the Google Meet conceit) */
+    .vsl-final { background: var(--navy); }
+    .vsl-final-inner { width: 100%; max-width: 520px; text-align: center; }
+    .vsl-final-title {
+      font-family: var(--font);
+      font-weight: 600; letter-spacing: -0.02em; line-height: 1.2;
+      color: var(--muted);
+      font-size: clamp(20px, 3vw, 30px);
+      margin: 0 0 24px;
+    }
+    .vsl-final-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    /* Stack on mobile, side-by-side on desktop (768px breakpoint) */
+    @media (max-width: 767px) {
+      .vsl-final-btns { flex-direction: column; align-items: stretch; }
+      .vsl-final-btns .btn { width: 100%; }
+    }
+    .vsl-rejoin {
+      background: transparent; color: var(--muted);
+      border: 1px solid rgba(255,255,255,0.22); box-shadow: none;
+    }
+    .vsl-rejoin:hover {
+      color: #fff; border-color: rgba(255,255,255,0.4);
+      transform: translateY(-2px); filter: none;
+    }
+    .vsl-rejoin:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+    .vsl-rejoin:active { transform: translateY(0); }
+
+    /* Controls */
+    .vsl-controls {
+      position: absolute; left: 0; right: 0; bottom: 0; z-index: 5;
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px;
+      background: linear-gradient(to top, rgba(5,8,15,0.72), transparent);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+    .vsl-controls.force, .vsl-stage:hover .vsl-controls.force { opacity: 1; pointer-events: auto; }
+    .vsl-controls.force .vsl-ctrl { pointer-events: auto; }
+    .vsl-ctrl {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: #fff; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.14s ease, transform 0.14s ease;
+    }
+    .vsl-ctrl:hover { background: rgba(255,255,255,0.22); }
+    .vsl-ctrl:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+    .vsl-ctrl:active { transform: scale(0.92); }
+    .vsl-ctrl svg { width: 16px; height: 16px; fill: #fff; }
+
+    .sr-only {
+      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .vsl-video, .vsl-dark, .vsl-overlay { transition-duration: 0.25s; }
+      .vsl-video.zoom { transform: none; }
+      .vsl-playbtn.pulse { animation: none; }
+    }
   </style>
 </head>
 <body>
@@ -764,26 +961,93 @@
   </div>
 
   <div class="wrap hero-content txt-center" style="width:100%;">
-    <p class="eyebrow" style="margin-bottom:16px;">For eCommerce brand owners</p>
+    <p class="eyebrow" style="margin-bottom:10px;">For eCommerce brand owners</p>
     <h1 class="display"
-        style="font-size:clamp(32px,4.5vw,56px);max-width:860px;margin:0 auto 20px;line-height:1.05;">
-      Two weeks.<br>What we build compounds.<br>Whether you stay or not.
+        style="font-size:clamp(23px,2.8vw,36px);max-width:720px;margin:0 auto 16px;line-height:1.08;white-space:normal;overflow:visible;text-overflow:clip;">
+      Two weeks. What we build compounds. Whether you stay or not.
     </h1>
-    <p class="subhead body-max"
-       style="font-size:clamp(16px,1.4vw,18px);margin:0 auto 16px;">
-      Retention-first systems that compound LTV,<br><strong>WITHOUT</strong> the discount blasts that sabotage your brand's reputation
-    </p>
-    <p style="font-size:16px;font-weight:300;color:rgba(255,255,255,0.5);margin:0 0 20px;">
-      See exactly how we run it. &#x2193;
-    </p>
-    <!-- VSL embed -->
-    <div style="max-width:780px;margin:0 auto 24px;">
-      <iframe width="100%" src="https://www.youtube.com/embed/nBNgZdUXnNA" title="SecondWave Inbox VSL" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" style="aspect-ratio:16/9;width:100%;height:auto;border-radius:12px;display:block;"></iframe>
+
+    <!-- ═══ VSL INTERACTIVE BRANCHING PLAYER ═══ -->
+    <div class="vsl-stage" id="vslStage" aria-label="SecondWave interactive video">
+      <video id="vslVideo" class="vsl-video"
+             src="/videos/hook.mp4"
+             playsinline preload="auto"
+             aria-label="SecondWave video sales letter"></video>
+
+      <!-- Dark wash for transitions -->
+      <div class="vsl-dark" id="vslDark" aria-hidden="true"></div>
+
+      <!-- Poster / play gate -->
+      <button class="vsl-poster" id="vslPoster" type="button" aria-label="Play video with sound">
+        <span class="vsl-playbtn" id="vslPlayBtn">
+          <svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true"><polygon points="7,4 20,12 7,20"/></svg>
+        </span>
+      </button>
+
+      <!-- Question overlay -->
+      <div class="vsl-overlay vsl-question" id="vslQuestion" role="dialog" aria-modal="true"
+           aria-labelledby="vslQText" hidden>
+        <div class="vsl-q-inner">
+          <p class="vsl-q-text" id="vslQText">Out of these four things, what would make the most impact on your brand?</p>
+          <div class="vsl-q-grid" id="vslQGrid" role="group" aria-label="Choose one option">
+            <button class="vsl-choice" type="button" data-branch="capture">Turning your traffic into a real audience you own</button>
+            <button class="vsl-choice" type="button" data-branch="convert">Closing the customers who almost bought</button>
+            <button class="vsl-choice" type="button" data-branch="retain">Compounding revenue from the customers you already have</button>
+            <button class="vsl-choice" type="button" data-branch="scale">Growing without spending more on ads</button>
+          </div>
+        </div>
+        <svg class="vsl-ring" id="vslQRing" viewBox="0 0 44 44" aria-hidden="true">
+          <circle class="vsl-ring-bg" cx="22" cy="22" r="20"></circle>
+          <circle class="vsl-ring-fg" cx="22" cy="22" r="20"></circle>
+        </svg>
+      </div>
+
+      <!-- Bridge overlay -->
+      <div class="vsl-overlay vsl-bridge" id="vslBridge" role="dialog" aria-modal="true"
+           aria-labelledby="vslBText" hidden>
+        <div class="vsl-q-inner">
+          <p class="vsl-q-text" id="vslBText">Want to see another one?</p>
+          <div class="vsl-bridge-btns">
+            <button class="vsl-choice vsl-yes" type="button" data-bridge="yes">Yeah, show me another one</button>
+            <button class="vsl-choice vsl-no"  type="button" data-bridge="no">Nah, I am good</button>
+          </div>
+        </div>
+        <svg class="vsl-ring" id="vslBRing" viewBox="0 0 44 44" aria-hidden="true">
+          <circle class="vsl-ring-bg" cx="22" cy="22" r="20"></circle>
+          <circle class="vsl-ring-fg" cx="22" cy="22" r="20"></circle>
+        </svg>
+      </div>
+
+      <!-- Call-ended screen -->
+      <div class="vsl-overlay vsl-final" id="vslFinal" role="dialog" aria-modal="true"
+           aria-labelledby="vslFinalTitle" hidden>
+        <div class="vsl-final-inner">
+          <p class="vsl-final-title" id="vslFinalTitle">Call ended</p>
+          <div class="vsl-final-btns">
+            <a href="https://secondwaveinbox.ca/book" class="btn btn-blue"
+               style="font-size:15px;padding:15px 40px;">Book a wavecheck</a>
+            <button type="button" class="btn vsl-rejoin" id="vslRejoin"
+                    style="font-size:15px;padding:15px 40px;">Rejoin the call</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hang-up sound (optional; screen still works if file is missing) -->
+      <audio id="vslHangup" src="/public/audio/hangup.mp3" preload="auto"></audio>
+
+      <!-- Controls -->
+      <div class="vsl-controls" id="vslControls">
+        <button class="vsl-ctrl" id="vslPlayPause" type="button" aria-label="Pause"></button>
+        <button class="vsl-ctrl" id="vslMute" type="button" aria-label="Mute"></button>
+      </div>
+
+      <span class="sr-only" id="vslLive" aria-live="assertive"></span>
     </div>
+
     <a href="https://calendly.com/eesawithsecondwave/sw-audit"
        target="_blank" rel="noopener noreferrer"
        class="btn btn-blue btn-fw"
-       style="font-size:15px;padding:15px 40px;">
+       style="font-size:15px;padding:14px 40px;margin-top:18px;">
       Book a Strategy Call
     </a>
   </div>
@@ -1520,6 +1784,284 @@ var io = new IntersectionObserver(function(entries) {
   });
 }, { threshold: 0.4 });
 counters.forEach(function(el) { io.observe(el); });
+
+
+/* ═══════════════════════════════════════════
+   VSL INTERACTIVE BRANCHING PLAYER
+═══════════════════════════════════════════ */
+(function () {
+  var stage = document.getElementById('vslStage');
+  if (!stage) return;
+
+  var video    = document.getElementById('vslVideo');
+  var dark     = document.getElementById('vslDark');
+  var poster   = document.getElementById('vslPoster');
+  var playBtn  = document.getElementById('vslPlayBtn');
+  var qOverlay = document.getElementById('vslQuestion');
+  var qGrid    = document.getElementById('vslQGrid');
+  var qRing    = document.getElementById('vslQRing').querySelector('.vsl-ring-fg');
+  var bridge   = document.getElementById('vslBridge');
+  var bRing    = document.getElementById('vslBRing').querySelector('.vsl-ring-fg');
+  var finalO   = document.getElementById('vslFinal');
+  var rejoinBtn = document.getElementById('vslRejoin');
+  var hangup   = document.getElementById('vslHangup');
+  var controls = document.getElementById('vslControls');
+  var ppBtn    = document.getElementById('vslPlayPause');
+  var muteBtn  = document.getElementById('vslMute');
+  var live     = document.getElementById('vslLive');
+
+  var VID = '/videos/';
+  var ALL = ['capture', 'convert', 'retain', 'scale'];
+
+  /* ── icons ── */
+  var ICON = {
+    play:  '<svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="7,4 20,12 7,20"/></svg>',
+    pause: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>',
+    vol:   '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path d="M16 8.5a4 4 0 010 7" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>',
+    mute:  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 5V4L8 9H4z"/><path d="M16 9l5 5m0-5l-5 5" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>'
+  };
+
+  /* ── in-memory state ── */
+  var watchedBranches    = new Set();
+  var lastBranchWatched  = null;
+  var isFirstWatch       = true;
+  var totalBranchesWatched = 0;
+
+  /* ── runtime flags ── */
+  var currentType   = 'hook';   // hook | branch-first | branch-second | universal | close
+  var transitioning = false;    // end-transition already begun for current clip
+  var started       = false;
+  var volFadeId     = null;
+  var idleTimer     = null;
+  var pulseOn       = null;
+  var pulseOff      = null;
+
+  /* ─────────── helpers ─────────── */
+  function clearVolFade() { if (volFadeId) { clearInterval(volFadeId); volFadeId = null; } }
+  function fadeVolumeTo(target, ms) {
+    clearVolFade();
+    if (video.muted) return;
+    var startV = video.volume, t0 = performance.now();
+    volFadeId = setInterval(function () {
+      var k = Math.min((performance.now() - t0) / ms, 1);
+      video.volume = startV + (target - startV) * k;
+      if (k >= 1) clearVolFade();
+    }, 40);
+  }
+  function resetVisual() {
+    video.classList.remove('zoom');
+    dark.classList.remove('show');
+    video.playbackRate = 1.0;
+    clearVolFade();
+    if (!video.muted) video.volume = 1.0;
+  }
+  function showOverlay(o) {
+    o.removeAttribute('hidden');
+    void o.offsetWidth;            /* force reflow so the fade plays */
+    o.classList.add('show');
+  }
+  function hideOverlay(o) {
+    o.classList.remove('show');
+    o.setAttribute('hidden', '');
+  }
+  function stopTimer(ring) {
+    if (idleTimer) { clearTimeout(idleTimer); idleTimer = null; }
+    ring.classList.remove('run');
+    void ring.offsetWidth;         /* reset ring instantly */
+  }
+  function startTimer(ring, onIdle) {
+    void ring.offsetWidth;
+    ring.classList.add('run');
+    live.textContent = 'Choose within 5 seconds.';
+    idleTimer = setTimeout(function () { idleTimer = null; onIdle(); }, 5000);
+  }
+  function focusFirst(container, sel) {
+    var els = container.querySelectorAll(sel || '.vsl-choice');
+    for (var i = 0; i < els.length; i++) {
+      if (els[i].offsetParent !== null && !els[i].disabled) { els[i].focus(); return; }
+    }
+  }
+
+  /* ─────────── playback ─────────── */
+  function playClip(file, type) {
+    transitioning = false;
+    resetVisual();
+    currentType = type;
+    video.src = VID + file;
+    video.load();
+    video.play().catch(function () {});
+    controls.classList.add('force');
+    updatePP();
+  }
+  function startPlayback() {
+    if (started) return;
+    started = true;
+    stopPulse();
+    poster.classList.add('hide');
+    controls.classList.add('force');
+    currentType = 'hook';
+    transitioning = false;
+    try { video.currentTime = 0; } catch (e) {}
+    video.play().catch(function () {});
+    updatePP();
+  }
+
+  /* ─────────── pulse hint (30s → 60s) ─────────── */
+  function startPulse() {
+    pulseOn = setTimeout(function () { if (!started) playBtn.classList.add('pulse'); }, 30000);
+    pulseOff = setTimeout(function () { playBtn.classList.remove('pulse'); }, 60000);
+  }
+  function stopPulse() {
+    if (pulseOn)  clearTimeout(pulseOn);
+    if (pulseOff) clearTimeout(pulseOff);
+    playBtn.classList.remove('pulse');
+  }
+
+  /* ─────────── end transitions ─────────── */
+  function beginEndTransition(zoom) {
+    transitioning = true;
+    video.playbackRate = 0.5;               // slow-mo
+    if (zoom) video.classList.add('zoom');  // GTA zoom (question only)
+    dark.classList.add('show');             // dark wash to 40%
+    fadeVolumeTo(0.4, 1000);                // audio to 40%
+  }
+  video.addEventListener('timeupdate', function () {
+    if (transitioning || !started) return;
+    var d = video.duration;
+    if (!isFinite(d) || d <= 0) return;
+    if (d - video.currentTime <= 1.0) {
+      if (currentType === 'hook')             beginEndTransition(true);   // + zoom
+      else if (currentType === 'branch-first') beginEndTransition(false); // soft, no zoom
+    }
+  });
+  video.addEventListener('ended', function () {
+    switch (currentType) {
+      case 'hook':          showQuestion(); break;
+      case 'branch-first':  showBridge();   break;
+      case 'branch-second': playClose();    break;
+      case 'universal':     playClose();    break;
+      case 'close':         showFinal();    break;
+    }
+  });
+
+  /* ─────────── question overlay ─────────── */
+  function showQuestion() {
+    var avail = ALL.filter(function (k) { return !watchedBranches.has(k); });
+    Array.prototype.forEach.call(qGrid.querySelectorAll('.vsl-choice'), function (btn) {
+      var on = avail.indexOf(btn.dataset.branch) !== -1;
+      btn.style.display = on ? '' : 'none';
+      btn.disabled = !on;
+    });
+    showOverlay(qOverlay);
+    /* 5s timer starts only AFTER the 800ms fade-in completes */
+    setTimeout(function () {
+      if (qOverlay.hasAttribute('hidden')) return;   // user already chose
+      focusFirst(qGrid);
+      startTimer(qRing, onQuestionIdle);
+    }, 820);
+  }
+  function onQuestionIdle() {
+    stopTimer(qRing);
+    hideOverlay(qOverlay);
+    resetVisual();
+    playClip('universal.mp4', 'universal');
+  }
+  qGrid.addEventListener('click', function (e) {
+    var btn = e.target.closest('.vsl-choice');
+    if (!btn || btn.disabled) return;
+    stopTimer(qRing);
+    hideOverlay(qOverlay);
+    resetVisual();                       // hard cut: no slow-mo on the way out
+    var key = btn.dataset.branch;
+    var variant = isFirstWatch ? 'first' : 'second';
+    watchedBranches.add(key);
+    lastBranchWatched = key;
+    isFirstWatch = false;
+    totalBranchesWatched = Math.min(totalBranchesWatched + 1, 2);
+    playClip(key + '-' + variant + '.mp4', variant === 'first' ? 'branch-first' : 'branch-second');
+  });
+
+  /* ─────────── bridge overlay ─────────── */
+  function showBridge() {
+    showOverlay(bridge);
+    setTimeout(function () {
+      if (bridge.hasAttribute('hidden')) return;
+      focusFirst(bridge);
+      startTimer(bRing, onBridgeIdle);
+    }, 820);
+  }
+  function onBridgeIdle() {
+    stopTimer(bRing);
+    hideOverlay(bridge);
+    resetVisual();
+    playClose();
+  }
+  bridge.addEventListener('click', function (e) {
+    var btn = e.target.closest('.vsl-choice');
+    if (!btn) return;
+    stopTimer(bRing);
+    hideOverlay(bridge);
+    resetVisual();
+    if (btn.dataset.bridge === 'yes') showQuestion();   // 3 remaining options
+    else playClose();
+  });
+
+  /* ─────────── close / final ─────────── */
+  function playClose() { playClip('close.mp4', 'close'); }
+  function showFinal() {
+    resetVisual();
+    controls.classList.remove('force');
+    playHangup();                        // hang-up SFX as the screen transitions in
+    showOverlay(finalO);
+    var a = finalO.querySelector('a');
+    if (a) a.focus();
+  }
+  function playHangup() {
+    if (!hangup) return;
+    try {
+      hangup.currentTime = 0;
+      var p = hangup.play();
+      if (p && p.catch) p.catch(function () {});   // missing/blocked audio: fail silently
+    } catch (e) {}
+  }
+  function restartFromHook() {
+    // "Rejoin the call" — replay the entire VSL from the hook.
+    if (hangup) { try { hangup.pause(); hangup.currentTime = 0; } catch (e) {} }
+    hideOverlay(finalO);
+    watchedBranches = new Set();
+    lastBranchWatched = null;
+    isFirstWatch = true;
+    totalBranchesWatched = 0;
+    started = true;                      // user already engaged; keep gates open
+    playClip('hook.mp4', 'hook');
+  }
+  rejoinBtn.addEventListener('click', restartFromHook);
+
+  /* ─────────── controls ─────────── */
+  function updatePP() {
+    var paused = video.paused;
+    ppBtn.setAttribute('aria-label', paused ? 'Play' : 'Pause');
+    ppBtn.innerHTML = paused ? ICON.play : ICON.pause;
+  }
+  ppBtn.addEventListener('click', function () {
+    if (video.paused) video.play().catch(function(){}); else video.pause();
+    updatePP();
+  });
+  video.addEventListener('play', updatePP);
+  video.addEventListener('pause', updatePP);
+  muteBtn.addEventListener('click', function () {
+    video.muted = !video.muted;
+    muteBtn.setAttribute('aria-label', video.muted ? 'Unmute' : 'Mute');
+    muteBtn.innerHTML = video.muted ? ICON.mute : ICON.vol;
+    if (!video.muted) video.volume = 1.0;
+  });
+
+  /* ─────────── init ─────────── */
+  poster.addEventListener('click', startPlayback);
+  ppBtn.innerHTML   = ICON.pause;
+  muteBtn.innerHTML = ICON.vol;
+  startPulse();
+})();
 </script>
 </body>
 </html>

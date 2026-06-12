@@ -1,4 +1,7 @@
-node_modules/
+﻿node_modules/
 temporary screenshots/
 screenshot-*.mjs
 brand_assets/sw-apollo-dtc.md
+brief.md
+instruction.md
+sw-apollo-cold-leads.md
