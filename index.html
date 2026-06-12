@@ -838,8 +838,32 @@
     }
     .vsl-ring-fg.run { transition: stroke-dashoffset 5s linear; stroke-dashoffset: 125.66; }
 
-    /* Final CTA overlay */
-    .vsl-final { background: rgba(12,25,53,0.84); }
+    /* Call-ended screen (closes the Google Meet conceit) */
+    .vsl-final { background: var(--navy); }
+    .vsl-final-inner { width: 100%; max-width: 520px; text-align: center; }
+    .vsl-final-title {
+      font-family: var(--font);
+      font-weight: 600; letter-spacing: -0.02em; line-height: 1.2;
+      color: var(--muted);
+      font-size: clamp(20px, 3vw, 30px);
+      margin: 0 0 24px;
+    }
+    .vsl-final-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    /* Stack on mobile, side-by-side on desktop (768px breakpoint) */
+    @media (max-width: 767px) {
+      .vsl-final-btns { flex-direction: column; align-items: stretch; }
+      .vsl-final-btns .btn { width: 100%; }
+    }
+    .vsl-rejoin {
+      background: transparent; color: var(--muted);
+      border: 1px solid rgba(255,255,255,0.22); box-shadow: none;
+    }
+    .vsl-rejoin:hover {
+      color: #fff; border-color: rgba(255,255,255,0.4);
+      transform: translateY(-2px); filter: none;
+    }
+    .vsl-rejoin:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+    .vsl-rejoin:active { transform: translateY(0); }
 
     /* Controls */
     .vsl-controls {
@@ -994,14 +1018,22 @@
         </svg>
       </div>
 
-      <!-- Final CTA overlay -->
+      <!-- Call-ended screen -->
       <div class="vsl-overlay vsl-final" id="vslFinal" role="dialog" aria-modal="true"
-           aria-label="Next step" hidden>
-        <a href="https://secondwaveinbox.ca/book" class="btn btn-blue"
-           style="font-size:15px;padding:15px 40px;">
-          Book a wavecheck call
-        </a>
+           aria-labelledby="vslFinalTitle" hidden>
+        <div class="vsl-final-inner">
+          <p class="vsl-final-title" id="vslFinalTitle">Call ended</p>
+          <div class="vsl-final-btns">
+            <a href="https://secondwaveinbox.ca/book" class="btn btn-blue"
+               style="font-size:15px;padding:15px 40px;">Book a wavecheck</a>
+            <button type="button" class="btn vsl-rejoin" id="vslRejoin"
+                    style="font-size:15px;padding:15px 40px;">Rejoin the call</button>
+          </div>
+        </div>
       </div>
+
+      <!-- Hang-up sound (optional; screen still works if file is missing) -->
+      <audio id="vslHangup" src="/public/audio/hangup.mp3" preload="auto"></audio>
 
       <!-- Controls -->
       <div class="vsl-controls" id="vslControls">
@@ -1771,6 +1803,8 @@ counters.forEach(function(el) { io.observe(el); });
   var bridge   = document.getElementById('vslBridge');
   var bRing    = document.getElementById('vslBRing').querySelector('.vsl-ring-fg');
   var finalO   = document.getElementById('vslFinal');
+  var rejoinBtn = document.getElementById('vslRejoin');
+  var hangup   = document.getElementById('vslHangup');
   var controls = document.getElementById('vslControls');
   var ppBtn    = document.getElementById('vslPlayPause');
   var muteBtn  = document.getElementById('vslMute');
@@ -1977,10 +2011,31 @@ counters.forEach(function(el) { io.observe(el); });
   function showFinal() {
     resetVisual();
     controls.classList.remove('force');
+    playHangup();                        // hang-up SFX as the screen transitions in
     showOverlay(finalO);
     var a = finalO.querySelector('a');
     if (a) a.focus();
   }
+  function playHangup() {
+    if (!hangup) return;
+    try {
+      hangup.currentTime = 0;
+      var p = hangup.play();
+      if (p && p.catch) p.catch(function () {});   // missing/blocked audio: fail silently
+    } catch (e) {}
+  }
+  function restartFromHook() {
+    // "Rejoin the call" — replay the entire VSL from the hook.
+    if (hangup) { try { hangup.pause(); hangup.currentTime = 0; } catch (e) {} }
+    hideOverlay(finalO);
+    watchedBranches = new Set();
+    lastBranchWatched = null;
+    isFirstWatch = true;
+    totalBranchesWatched = 0;
+    started = true;                      // user already engaged; keep gates open
+    playClip('hook.mp4', 'hook');
+  }
+  rejoinBtn.addEventListener('click', restartFromHook);
 
   /* ─────────── controls ─────────── */
   function updatePP() {
