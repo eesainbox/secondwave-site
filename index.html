@@ -1998,12 +1998,11 @@ counters.forEach(function(el) { io.observe(el); });
 
   /* ── in-memory state ── */
   var watchedBranches    = new Set();
-  var lastBranchWatched  = null;
-  var isFirstWatch       = true;
-  var totalBranchesWatched = 0;
+  var hookWatched        = false;
+  var universalPlayed    = false;
 
   /* ── runtime flags ── */
-  var currentType   = 'hook';   // hook | branch-first | branch-second | universal | close
+  var currentType   = 'hook';   // hook | branch | universal | close
   var transitioning = false;    // end-transition already begun for current clip
   var started       = false;
   var volFadeId     = null;
@@ -2106,27 +2105,23 @@ counters.forEach(function(el) { io.observe(el); });
     var d = video.duration;
     if (!isFinite(d) || d <= 0) return;
     if (d - video.currentTime <= 1.0) {
-      if (currentType === 'hook')             beginEndTransition(true);   // + zoom
-      else if (currentType === 'branch-first') beginEndTransition(false); // soft, no zoom
+      if (currentType === 'hook')        beginEndTransition(true);   // + zoom
+      else if (currentType === 'branch') beginEndTransition(false); // soft, no zoom
     }
   });
   video.addEventListener('ended', function () {
     switch (currentType) {
-      case 'hook':          showQuestion(); break;
-      case 'branch-first':  showBridge();   break;
-      case 'branch-second': playClose();    break;
-      case 'universal':     playClose();    break;
-      case 'close':         showFinal();    break;
+      case 'hook':       onHookEnd();   break;
+      case 'branch':     showBridge();  break;
+      case 'universal':  playClose();   break;
+      case 'close':      showFinal();   break;
     }
   });
 
   /* ─────────── question overlay ─────────── */
   function showQuestion() {
-    var avail = ALL.filter(function (k) { return !watchedBranches.has(k); });
     Array.prototype.forEach.call(qGrid.querySelectorAll('.vsl-choice'), function (btn) {
-      var on = avail.indexOf(btn.dataset.branch) !== -1;
-      btn.style.display = on ? '' : 'none';
-      btn.disabled = !on;
+      btn.style.display = ''; btn.disabled = false;
     });
     showOverlay(qOverlay);
     /* 5s timer starts only AFTER the 800ms fade-in completes */
@@ -2140,7 +2135,17 @@ counters.forEach(function(el) { io.observe(el); });
     stopTimer(qRing);
     hideOverlay(qOverlay);
     resetVisual();
-    playClip('universal.mp4', 'universal');
+    if (watchedBranches.size === 0 && !universalPlayed) {
+      universalPlayed = true;
+      playClip('universal.mp4', 'universal');
+    } else {
+      playClose();
+    }
+  }
+  function onHookEnd() {
+    hookWatched = true;
+    jumpBtn.style.display = '';
+    showQuestion();
   }
   qGrid.addEventListener('click', function (e) {
     var btn = e.target.closest('.vsl-choice');
@@ -2149,12 +2154,8 @@ counters.forEach(function(el) { io.observe(el); });
     hideOverlay(qOverlay);
     resetVisual();                       // hard cut: no slow-mo on the way out
     var key = btn.dataset.branch;
-    var variant = isFirstWatch ? 'first' : 'second';
     watchedBranches.add(key);
-    lastBranchWatched = key;
-    isFirstWatch = false;
-    totalBranchesWatched = Math.min(totalBranchesWatched + 1, 2);
-    playClip(key + '-' + variant + '.mp4', variant === 'first' ? 'branch-first' : 'branch-second');
+    playClip(key + '-first.mp4', 'branch');
   });
 
   /* ─────────── bridge overlay ─────────── */
@@ -2224,9 +2225,9 @@ counters.forEach(function(el) { io.observe(el); });
     if (hangup) { try { hangup.pause(); hangup.currentTime = 0; } catch (e) {} }
     hideOverlay(finalO);
     watchedBranches = new Set();
-    lastBranchWatched = null;
-    isFirstWatch = true;
-    totalBranchesWatched = 0;
+    universalPlayed = false;
+    hookWatched = false;
+    jumpBtn.style.display = 'none';
     started = true;                      // user already engaged; keep gates open
     playClip('hook.mp4', 'hook');
   }
@@ -2300,8 +2301,8 @@ counters.forEach(function(el) { io.observe(el); });
     hideOverlay(jumpMenu);
     resetVisual();
     if(k==='question'){ showQuestion(); return; }
-    watchedBranches.add(k); lastBranchWatched=k; isFirstWatch=false;
-    playClip(k+'-first.mp4','branch-first');
+    watchedBranches.add(k);
+    playClip(k+'-first.mp4','branch');
   });
 
   /* ─────────── init ─────────── */
@@ -2318,6 +2319,7 @@ counters.forEach(function(el) { io.observe(el); });
   poster.addEventListener('click', enterCall);
   ppBtn.innerHTML   = ICON.pause;
   muteBtn.innerHTML = ICON.vol;
+  jumpBtn.style.display = 'none';
   startPulse();
 })();
 </script>
