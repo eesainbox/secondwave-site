@@ -760,6 +760,23 @@
     .vsl-poster:focus-visible { outline: 2px solid var(--blue); outline-offset: -4px; }
     @media(max-width:480px){ .vsl-playbtn { width:64px; height:64px; } .vsl-playbtn svg { width:26px; height:26px; } }
 
+    .vsl-lobby { display:flex; flex-direction:column; align-items:center; text-align:center; padding:18px; max-width:420px; }
+    .vsl-lobby-live { display:inline-flex; align-items:center; gap:7px; background:rgba(40,200,100,0.14); border:1px solid rgba(40,200,100,0.45); color:#8ff0bb; font-size:12px; padding:4px 11px; border-radius:999px; margin-bottom:16px; }
+    .vsl-lobby-live i { width:7px; height:7px; border-radius:50%; background:#28c840; display:inline-block; }
+    .vsl-lobby-avatars { display:flex; gap:8px; margin-bottom:16px; }
+    .vsl-lobby-av { width:52px; height:52px; border-radius:50%; background:#1d3a5f; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px; color:#fff; border:2px solid var(--blue); }
+    .vsl-lobby-h { font-size:clamp(18px,2.4vw,22px); font-weight:800; letter-spacing:-0.02em; color:#fff; margin:0 0 6px; }
+    .vsl-lobby-sub { font-size:13px; color:rgba(255,255,255,0.62); line-height:1.5; margin:0 0 20px; max-width:330px; }
+    .vsl-watch { background:var(--blue); color:#06182e; font-weight:700; font-size:15px; padding:12px 30px; border-radius:999px; display:inline-flex; align-items:center; gap:8px; transition:transform .2s cubic-bezier(0.34,1.56,0.64,1); box-shadow:0 8px 30px rgba(59,158,255,0.4); }
+    .vsl-poster:hover .vsl-watch { transform:translateY(-2px); }
+    .vsl-poster:active .vsl-watch { transform:translateY(0); }
+    .vsl-watch.pulse { animation: vsl-pulse 1.6s ease-in-out infinite; }
+    .vsl-connecting { position:absolute; inset:0; z-index:8; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#0a1322; opacity:0; pointer-events:none; transition:opacity .25s ease; }
+    .vsl-connecting.show { opacity:1; pointer-events:auto; }
+    .vsl-spin { width:34px; height:34px; border-radius:50%; border:3px solid rgba(255,255,255,0.18); border-top-color:var(--blue); animation:vsl-rot .8s linear infinite; margin-bottom:14px; }
+    @keyframes vsl-rot { to { transform:rotate(360deg); } }
+    .vsl-connecting p { font-size:15px; font-weight:600; color:#fff; margin:0; }
+
     .vsl-playbtn.pulse { animation: vsl-pulse 1.6s ease-in-out infinite; }
     @keyframes vsl-pulse {
       0%,100% { box-shadow: 0 8px 40px rgba(59,158,255,0.45), 0 0 0 0 rgba(59,158,255,0.55); }
@@ -1023,12 +1040,22 @@
       <!-- Dark wash for transitions -->
       <div class="vsl-dark" id="vslDark" aria-hidden="true"></div>
 
-      <!-- Poster / play gate -->
-      <button class="vsl-poster" id="vslPoster" type="button" aria-label="Play video with sound">
-        <span class="vsl-playbtn" id="vslPlayBtn">
-          <svg viewBox="0 0 24 24" width="34" height="34" aria-hidden="true"><polygon points="7,4 20,12 7,20"/></svg>
-        </span>
+      <!-- Poster / lobby gate -->
+      <button class="vsl-poster" id="vslPoster" type="button" aria-label="Watch the call">
+        <div class="vsl-lobby">
+          <span class="vsl-lobby-live"><i></i> They are already in the call</span>
+          <div class="vsl-lobby-avatars"><span class="vsl-lobby-av">EA</span><span class="vsl-lobby-av">JF</span></div>
+          <p class="vsl-lobby-h">Eesa and Joshua are on the call</p>
+          <p class="vsl-lobby-sub">Two weeks. You pick what matters most. We take it from there.</p>
+          <span class="vsl-watch" id="vslPlayBtn"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="fill:#06182e;margin-left:2px"><polygon points="7,4 20,12 7,20"/></svg> Watch the call</span>
+        </div>
       </button>
+
+      <!-- Connecting beat (between Watch and the hook) -->
+      <div class="vsl-connecting" id="vslConnecting" aria-hidden="true">
+        <div class="vsl-spin"></div>
+        <p>Starting the call</p>
+      </div>
 
       <!-- Question overlay -->
       <div class="vsl-overlay vsl-question" id="vslQuestion" role="dialog" aria-modal="true"
@@ -1888,6 +1915,7 @@ counters.forEach(function(el) { io.observe(el); });
   var video    = document.getElementById('vslVideo');
   var dark     = document.getElementById('vslDark');
   var poster   = document.getElementById('vslPoster');
+  var connectingEl = document.getElementById('vslConnecting');
   var playBtn  = document.getElementById('vslPlayBtn');
   var qOverlay = document.getElementById('vslQuestion');
   var qGrid    = document.getElementById('vslQGrid');
@@ -2173,7 +2201,17 @@ counters.forEach(function(el) { io.observe(el); });
   });
 
   /* ─────────── init ─────────── */
-  poster.addEventListener('click', startPlayback);
+  function enterCall() {
+    if (started) return;
+    stopPulse();
+    poster.classList.add('hide');
+    connectingEl.classList.add('show');
+    setTimeout(function () {
+      connectingEl.classList.remove('show');
+      startPlayback();
+    }, 1000);
+  }
+  poster.addEventListener('click', enterCall);
   ppBtn.innerHTML   = ICON.pause;
   muteBtn.innerHTML = ICON.vol;
   startPulse();
