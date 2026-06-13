@@ -951,6 +951,23 @@
     .vsl-ctrl:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
     .vsl-ctrl:active { transform: scale(0.92); }
     .vsl-ctrl svg { width: 16px; height: 16px; fill: #fff; }
+    .vsl-scrub { flex:1; height:5px; background:rgba(255,255,255,0.22); border-radius:999px; position:relative; cursor:pointer; min-width:60px; touch-action:none; }
+    .vsl-scrub-fill { position:absolute; left:0; top:0; bottom:0; width:0%; background:var(--blue); border-radius:999px; }
+    .vsl-scrub-knob { position:absolute; top:50%; left:0%; width:12px; height:12px; border-radius:50%; background:#fff; transform:translate(-50%,-50%); pointer-events:none; }
+    .vsl-scrub:focus-visible { outline:2px solid var(--blue); outline-offset:3px; }
+    .vsl-time { font-family:var(--font); font-size:12px; color:rgba(255,255,255,0.85); min-width:84px; text-align:center; white-space:nowrap; }
+    .vsl-cc { font-family:var(--font); font-size:11px; font-weight:700; }
+    .vsl-cc[aria-pressed="true"] { background:var(--blue); color:#06182e; border-color:var(--blue); }
+    .vsl-jump-menu .vsl-jump-inner { width:100%; max-width:720px; text-align:center; }
+    .vsl-jump-title { font-family:var(--font); font-weight:800; color:#fff; font-size:clamp(18px,2.4vw,24px); margin:0 0 16px; letter-spacing:-0.02em; }
+    .vsl-jump-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .vsl-jump-opt { text-align:left; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.16); border-radius:12px; padding:13px 15px; color:#fff; cursor:pointer; font-family:var(--font); transition:background .15s,border-color .15s; }
+    .vsl-jump-opt:hover { background:rgba(59,158,255,0.16); border-color:var(--blue); }
+    .vsl-jump-opt b { display:block; font-size:15px; font-weight:700; margin-bottom:3px; }
+    .vsl-jump-opt span { display:block; font-size:12.5px; color:rgba(255,255,255,0.62); line-height:1.4; }
+    .vsl-jump-foot { display:flex; gap:14px; justify-content:center; margin-top:16px; flex-wrap:wrap; }
+    .vsl-jump-link { background:none; border:none; color:#9ec5f0; font-family:var(--font); font-size:13px; cursor:pointer; text-decoration:underline; padding:6px; }
+    @media (max-width:600px){ .vsl-jump-grid { grid-template-columns:1fr; } .vsl-time { min-width:auto; font-size:11px; } }
 
     .sr-only {
       position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
@@ -1035,7 +1052,7 @@
       <video id="vslVideo" class="vsl-video"
              src="/videos/hook.mp4"
              playsinline preload="auto"
-             aria-label="SecondWave video sales letter"></video>
+             aria-label="SecondWave video sales letter"><track id="vslTrack" kind="captions" srclang="en" label="English"></video>
 
       <!-- Dark wash for transitions -->
       <div class="vsl-dark" id="vslDark" aria-hidden="true"></div>
@@ -1157,7 +1174,32 @@
       <!-- Controls -->
       <div class="vsl-controls" id="vslControls">
         <button class="vsl-ctrl" id="vslPlayPause" type="button" aria-label="Pause"></button>
+        <div class="vsl-scrub" id="vslScrub" role="slider" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+          <div class="vsl-scrub-fill" id="vslScrubFill"></div>
+          <div class="vsl-scrub-knob" id="vslScrubKnob"></div>
+        </div>
+        <span class="vsl-time" id="vslTime">0:00 / 0:00</span>
         <button class="vsl-ctrl" id="vslMute" type="button" aria-label="Mute"></button>
+        <button class="vsl-ctrl vsl-cc" id="vslCC" type="button" aria-label="Captions" aria-pressed="false">CC</button>
+        <button class="vsl-ctrl" id="vslFs" type="button" aria-label="Fullscreen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="#fff" stroke-width="2"/></svg></button>
+        <button class="vsl-ctrl" id="vslJump" type="button" aria-label="Jump to another part"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></button>
+      </div>
+
+      <!-- Jump menu -->
+      <div class="vsl-overlay vsl-jump-menu" id="vslJumpMenu" role="dialog" aria-modal="true" aria-label="Jump to a part" hidden>
+        <div class="vsl-jump-inner">
+          <p class="vsl-jump-title">Jump to any part</p>
+          <div class="vsl-jump-grid" id="vslJumpGrid">
+            <button class="vsl-jump-opt" type="button" data-jump="capture"><b>Capture</b><span>Turning your traffic into a real audience you own</span></button>
+            <button class="vsl-jump-opt" type="button" data-jump="convert"><b>Convert</b><span>Closing the customers who almost bought</span></button>
+            <button class="vsl-jump-opt" type="button" data-jump="retain"><b>Retain</b><span>Compounding revenue from the customers you already have</span></button>
+            <button class="vsl-jump-opt" type="button" data-jump="scale"><b>Scale</b><span>Growing without spending more on ads</span></button>
+          </div>
+          <div class="vsl-jump-foot">
+            <button class="vsl-jump-link" type="button" data-jump="question">Back to the question</button>
+            <button class="vsl-jump-link" type="button" data-jump="close">Close menu</button>
+          </div>
+        </div>
       </div>
 
       <span class="sr-only" id="vslLive" aria-live="assertive"></span>
@@ -1928,6 +1970,15 @@ counters.forEach(function(el) { io.observe(el); });
   var controls = document.getElementById('vslControls');
   var ppBtn    = document.getElementById('vslPlayPause');
   var muteBtn  = document.getElementById('vslMute');
+  var scrub    = document.getElementById('vslScrub');
+  var scrubFill= document.getElementById('vslScrubFill');
+  var scrubKnob= document.getElementById('vslScrubKnob');
+  var timeEl   = document.getElementById('vslTime');
+  var ccBtn    = document.getElementById('vslCC');
+  var fsBtn    = document.getElementById('vslFs');
+  var jumpBtn  = document.getElementById('vslJump');
+  var jumpMenu = document.getElementById('vslJumpMenu');
+  var capsTrack= document.getElementById('vslTrack');
   var live     = document.getElementById('vslLive');
   var keepO    = document.getElementById('vslKeep');
   var keepRing = document.getElementById('vslKeepRing').querySelector('.vsl-ring-fg');
@@ -2012,6 +2063,7 @@ counters.forEach(function(el) { io.observe(el); });
     resetVisual();
     currentType = type;
     video.src = VID + file;
+    if (capsTrack) { capsTrack.src = '/captions/' + file.replace('.mp4', '.vtt'); if (capsTrack.track) capsTrack.track.mode = capsOn ? 'showing' : 'hidden'; }
     video.load();
     video.play().catch(function () {});
     controls.classList.add('force');
@@ -2198,6 +2250,58 @@ counters.forEach(function(el) { io.observe(el); });
     muteBtn.setAttribute('aria-label', video.muted ? 'Unmute' : 'Mute');
     muteBtn.innerHTML = video.muted ? ICON.mute : ICON.vol;
     if (!video.muted) video.volume = 1.0;
+  });
+
+  /* ── scrub + time ── */
+  function fmt(s){ if(!isFinite(s)||s<0)s=0; var m=Math.floor(s/60),ss=Math.floor(s%60); return m+':'+(ss<10?'0':'')+ss; }
+  video.addEventListener('timeupdate', function(){
+    var d=video.duration, c=video.currentTime;
+    if(isFinite(d)&&d>0){ var p=(c/d)*100; scrubFill.style.width=p+'%'; scrubKnob.style.left=p+'%'; scrub.setAttribute('aria-valuenow', Math.round(p)); }
+    timeEl.textContent=fmt(c)+' / '+fmt(d);
+  });
+  function seekFromX(clientX){
+    var r=scrub.getBoundingClientRect(); var f=(clientX-r.left)/r.width;
+    f=Math.max(0,Math.min(1,f));
+    if(isFinite(video.duration)&&video.duration>0) video.currentTime=f*video.duration;
+  }
+  var dragging=false;
+  scrub.addEventListener('pointerdown', function(e){ dragging=true; try{scrub.setPointerCapture(e.pointerId);}catch(_){} seekFromX(e.clientX); });
+  scrub.addEventListener('pointermove', function(e){ if(dragging) seekFromX(e.clientX); });
+  scrub.addEventListener('pointerup', function(){ dragging=false; });
+  scrub.addEventListener('keydown', function(e){
+    if(!isFinite(video.duration)||video.duration<=0) return;
+    if(e.key==='ArrowRight'){ video.currentTime=Math.min(video.duration, video.currentTime+5); e.preventDefault(); }
+    else if(e.key==='ArrowLeft'){ video.currentTime=Math.max(0, video.currentTime-5); e.preventDefault(); }
+  });
+
+  /* ── captions ── */
+  var capsOn=false;
+  ccBtn.addEventListener('click', function(){
+    capsOn=!capsOn;
+    ccBtn.setAttribute('aria-pressed', capsOn?'true':'false');
+    if(capsTrack&&capsTrack.track) capsTrack.track.mode = capsOn?'showing':'hidden';
+  });
+
+  /* ── fullscreen ── */
+  fsBtn.addEventListener('click', function(){
+    if(!document.fullscreenElement){ var rf=stage.requestFullscreen||stage.webkitRequestFullscreen; if(rf) rf.call(stage); }
+    else { var ef=document.exitFullscreen||document.webkitExitFullscreen; if(ef) ef.call(document); }
+  });
+
+  /* ── jump menu (escape hatch into any part) ── */
+  var jumpResume=false;
+  function openJump(){ jumpResume=!video.paused; if(jumpResume) video.pause(); showOverlay(jumpMenu); }
+  function closeJump(){ hideOverlay(jumpMenu); if(jumpResume) video.play().catch(function(){}); }
+  jumpBtn.addEventListener('click', openJump);
+  jumpMenu.addEventListener('click', function(e){
+    var b=e.target.closest('[data-jump]'); if(!b) return;
+    var k=b.dataset.jump;
+    if(k==='close'){ closeJump(); return; }
+    hideOverlay(jumpMenu);
+    resetVisual();
+    if(k==='question'){ showQuestion(); return; }
+    watchedBranches.add(k); lastBranchWatched=k; isFirstWatch=false;
+    playClip(k+'-first.mp4','branch-first');
   });
 
   /* ─────────── init ─────────── */
