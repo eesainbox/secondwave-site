@@ -826,6 +826,13 @@
     }
     .vsl-q-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     @media(max-width:767px){ .vsl-q-grid { grid-template-columns: 1fr; gap: 10px; } }
+    .vsl-q-grid .vsl-choice { display: block; text-align: left; padding: 14px 16px; min-height: 0; }
+    .vsl-q-grid .vsl-choice b { display: block; font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 3px; line-height: 1.25; }
+    .vsl-q-grid .vsl-choice span { display: block; font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.66); line-height: 1.4; }
+    @media(max-width:767px){
+      .vsl-q-text { font-size: 17px; margin-bottom: 16px; }
+      .vsl-q-grid .vsl-choice { padding: 13px 15px; }
+    }
 
     .vsl-choice {
       min-height: 48px;
@@ -1092,10 +1099,10 @@
         <div class="vsl-q-inner">
           <p class="vsl-q-text" id="vslQText">Out of these four things, what would make the most impact on your brand?</p>
           <div class="vsl-q-grid" id="vslQGrid" role="group" aria-label="Choose one option">
-            <button class="vsl-choice" type="button" data-branch="capture">Turning your traffic into a real audience you own</button>
-            <button class="vsl-choice" type="button" data-branch="convert">Closing the customers who almost bought</button>
-            <button class="vsl-choice" type="button" data-branch="retain">Compounding revenue from the customers you already have</button>
-            <button class="vsl-choice" type="button" data-branch="scale">Growing without spending more on ads</button>
+            <button class="vsl-choice" type="button" data-branch="capture"><b>Capture</b><span>Turning your traffic into a real audience you own</span></button>
+            <button class="vsl-choice" type="button" data-branch="convert"><b>Convert</b><span>Closing the customers who almost bought</span></button>
+            <button class="vsl-choice" type="button" data-branch="retain"><b>Retain</b><span>Compounding revenue from the customers you already have</span></button>
+            <button class="vsl-choice" type="button" data-branch="scale"><b>Scale</b><span>Growing without spending more on ads</span></button>
           </div>
         </div>
         <svg class="vsl-ring" id="vslQRing" viewBox="0 0 44 44" aria-hidden="true">
